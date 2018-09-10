@@ -1,0 +1,138 @@
+
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="weather.css">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Weather Simulation</a>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            Dashboard <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Simulation 1</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="startSimulation()">Start</button>
+                    </div>
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        This week
+                    </button>
+                </div>
+
+            </div>
+            <div class="simulation-space">
+            </div>
+        </main>
+    </div>
+</div>
+
+
+
+<script>
+    let simulation = d3.select('.simulation-space');
+
+    // Field
+    let svg = simulation.append("svg")
+        .attr("width", 960)
+        .attr("height", 500)
+        .append("g")
+        .attr("transform", "translate(10,10)");
+
+
+    // ball
+    let ball = svg.append("circle")
+        .attr("class", "ball")
+        .attr("r", 10)
+        .style("fill", "rgba(120, 170, 255, 1.0)");
+
+    // target
+    let target = svg.append("rect")
+        .attr("class", "target")
+        .attr("width", 2000)
+        .attr("height",100)
+        .attr("transform", "translate(300,400)")
+        .style("fill", "rgba(255, 180, 255, 1.0)");
+
+
+
+
+    let collisionBox = function(shape){
+        this.x1 = shape.node().getCTM().e;
+        this.y1 = shape.node().getCTM().f;
+        this.x2 = this.x1 + shape.node().getBBox().width;
+        this.y2 = this.y1 + shape.node().getBBox().height;
+
+        this.intersects = function(other) {
+            let x1 = Math.max(this.x1,other.x1);
+            let x2 = Math.min(this.x2,other.x2);
+            let y1 = Math.max(this.y1,other.y1);
+            let y2 = Math.min(this.y2,other.y2);
+
+            console.log(x1,x2,y1,y2);
+            console.log(x1 < x2, y1 < y2);
+
+            return x1 < x2 && y1 < y2;
+        }
+    }
+
+    let startSimulation = function(){
+        let scaling = 10;
+
+        let x_start = 30;
+        let y_start = 500;
+
+        let vx = 30*scaling;
+        let vy = 15*scaling;
+
+        let g = 9.81*scaling;
+// ball
+        ball.attr("transform", "translate(30,500)");
+
+        ball.transition().duration(4000).ease(d3.easeLinear).attrTween("transform", function () {
+            return function (t) {
+                tsec = t*3;
+                let x = x_start + vx * tsec;
+                let y = y_start + (-vy * tsec + 1/2*g*tsec*tsec);
+
+
+                if(targetBox.intersects(new collisionBox(ball))){
+                    console.log("collide");
+                }
+                return "translate("+x+","+y+")";
+            }});
+    }
+
+    let targetBox = new collisionBox(target);
+</script>
+</body>
+</html>
