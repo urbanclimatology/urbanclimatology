@@ -1,0 +1,45 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Application </h1>
+</div>
+<div class="card">
+    <div class="card-body">
+        <p class="card-text">
+            We have gone a long way from historical climate data to weather products.
+            We have seen how we can reconstruct the local weather using historical observations,
+            numerical weather prediction models and statistics.
+            We have also seen that errors can occur on all scales: Measurements can be wrong, QC and homogenization is needed.
+            Reanalyses can generate realistic large scale fields, but need to be critically assessed.
+            Downscaling methods can produce local information, but with uncertainties.
+            Now comes the last step: the application.
+        </p>
+        <p class="card-text">
+            Long-term weather products can be used the generate hazard maps (e.g., using statistics),
+            or they can be further processed with numerical models.
+            Hydrological models can be used to simulated runoff given the precipitation.
+            Hydraulic models can then be used to determine the flooded area given the runoff.
+            Loss models can be used to map the storm risk, crop models can be used to simulate
+            harvested biomass. Many applications in climate impact research are based on high
+            resolution input data. These applications benefit from historical weather data.
+            In the <span class="text-danger">exercise</span> you learn to build and use a simple model to calculate the lake level.
+        </p>
+        <p class="card-text">
+            In the catchment for which you have reconstructed precipitation, there is a lake.
+            A company operates ferries and cruise ships on this lake. Navigation cannot take
+            place if the lake level is below 5 m, and also not if it is above 8 m.
+            The company would like to know on how many days per year the lake is not navigable.
+            In the <a href="data/Applications_LakeModel_Exercise.xls" target="_blank">Excel sheet</a>
+            you have precipitation data (downscaled or observed) since 1950, plus a starting value.
+            Use a simple mass balance model to simulate the lake level day by day.
+
+            $$L_{t} = L_{t-1} e^{ -\lambda \Delta t} + f R_{t}$$
+
+            where \(L\) is the lake level (in mm), \(R\) is daily rain fall (in mm), \(f\) (= 10)
+            is the concentration factor (ratio between the catchment area and the lake surface area),
+            \(\lambda\) (= 0.004 per day) describes the outflow of the lake, \(\Delta t\) (= 1 day) is the time increment.
+            Note that this is an oversimplified model that neglects evaporation,
+            storage in the form of snow or any other hydrological processes (see <a href="data/Applications_LakeModel_Solution.xls" target="_blank">solution</a>).
+
+        </p>
+    </div>
+</div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script>
