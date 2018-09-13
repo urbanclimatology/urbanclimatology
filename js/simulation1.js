@@ -5,11 +5,17 @@ var Hit;
 var noHit;
 
 let collisionBox = function(shape){
-    this.x1 = shape.node().getCTM().e + shape.node().getBBox().x;
-    this.y1 = shape.node().getCTM().f + shape.node().getBBox().y;
+    let ctm = shape.node().getCTM();
+    this.x1 = ctm.a*(ctm.e + shape.node().getBBox().x);
+    this.y1 = ctm.d*(ctm.f + shape.node().getBBox().y);
 
     this.x2 = this.x1 + shape.node().getBBox().width;
     this.y2 = this.y1 + shape.node().getBBox().height;
+
+    console.log(this.x1,this.x2,this.y1,this.y2);
+
+    console.log(shape.node().getCTM());
+    console.log(shape.node().getScreenCTM());
 
     this.intersects = function(other) {
         let x1 = Math.max(this.x1,other.x1);
@@ -41,6 +47,7 @@ let startSimulation = function(){
     ball.style("opacity", 1);
 
     console.log(vx,vy);
+    targetBox = new collisionBox(target);
 
     ball.transition("shoot").duration(10000).ease(d3.easeLinear).attrTween("transform", function () {
         return function (t) {
@@ -87,7 +94,6 @@ d3.xml("svg/complete/Burg.svg").then(function(xml){
     noHit = svg.select("#Nein").style("opacity", 0);
 
 
-    targetBox = new collisionBox(target);
 
 });
 

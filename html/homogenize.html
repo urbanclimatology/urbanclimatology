@@ -20,30 +20,39 @@
             The basic principle is to accumulate the differences (for precipitation or wind ratios are used instead of differences).
             In a homogenous section of the series, the accumulated differences build a straight line.
             Breakpoints are recognizable subjectively as breaks or bends in the accumulated differences.
-            Try it yourself in the <span class="text-danger">Exercises</span>.
-        </p>
-        <p class="card-text">
-            For the Craddock test the accumulated normalized differences s are calculated as follows:
-
-            $$s_{i} = s_{i-1} + a_{i} + (b_{m} - a_{m}) - b_{i}$$
-            where \(a\) is the reference series, \(b\) is the candidate series, \(a_{m}\)
-            is the mean of the reference series over the whole period, \(a_{m}\) is
-            the mean of the candidate series over the whole period.Open the
-            <a href="data/ClimateData_Homogenize_BreakDetection_Exercise.xls" target="_blank">Excel-file</a>
-            and calculate \(s_{i}\). Afterwards, find the breakpoints in the figure on the
-            right in the Excel-sheet (check the <a href="data/ClimateData_Homogenize_BreakDetection_Solution.xls" target="_blank">solution</a>).
-        </p>
-        <p class="card-text">
-            If possible, detected breaks are corrected. Thereby the most recent part of the
-            series is considered to be correct, and the earlier segements are corrected
-            towards the recent segments, working backwards. The correction amount is the
-            the difference between the mean value of the difference series before and after the
-            break, and this correction amount is subtracted form the segement before the break
-            (see <a href=http://campusvirtual.senamhi.gob.pe/climandes" target="_blank">Climandes</a> for further information).
-            Open the <a href="data/ClimateData_Homogenize_BreakCorrection_Exercise.xls" target="_blank">Excel-file</a>
-            and try to correct the breaks you have found in the previous exercise
-            (here’s the <a href="data/ClimateData_Homogenize_BreakCorrection_Solution.xls" target="_blank">solution</a>).
         </p>
     </div>
 </div>
+<p></p>
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Exercise</h4>
+    <hr>
+    <p class="card-text">
+
+    Try it yourself in the <span class="text-danger">Exercises</span>.
+    </p>
+    <p class="card-text">
+        For the Craddock test the accumulated normalized differences \(s\) are calculated as follows:
+
+        $$s_{i} = s_{i-1} + a_{i} + (b_{m} - a_{m}) - b_{i}$$
+        where \(a\) is the reference series, \(b\) is the candidate series, \(a_{m}\)
+        is the mean of the reference series over the whole period, \(a_{m}\) is
+        the mean of the candidate series over the whole period.Open the
+        <a href="data/ClimateData_Homogenize_BreakDetection_Exercise.xls" target="_blank">Excel-file</a>
+        and calculate \(s_{i}\). Afterwards, find the breakpoints in the figure on the
+        right in the Excel-sheet (check the <a href="data/ClimateData_Homogenize_BreakDetection_Solution.xls" target="_blank">solution</a>).
+    </p>
+    <p class="card-text">
+        If possible, detected breaks are corrected. Thereby the most recent part of the
+        series is considered to be correct, and the earlier segements are corrected
+        towards the recent segments, working backwards. The correction amount is the
+        the difference between the mean value of the difference series before and after the
+        break, and this correction amount is subtracted form the segement before the break
+        (see <a href=http://campusvirtual.senamhi.gob.pe/climandes" target="_blank">Climandes</a> for further information).
+        Open the <a href="data/ClimateData_Homogenize_BreakCorrection_Exercise.xls" target="_blank">Excel-file</a>
+        and try to correct the breaks you have found in the previous exercise
+        (here’s the <a href="data/ClimateData_Homogenize_BreakCorrection_Solution.xls" target="_blank">solution</a>).
+    </p>
+</div>
+
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script>
