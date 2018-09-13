@@ -63,7 +63,7 @@ let startSimulation = function(){
 
 
 
-d3.xml("http://localhost:8083/svg/complete/Burg.svg").then(function(xml){
+d3.xml("svg/complete/Burg.svg").then(function(xml){
 
     var importedSvg = document.importNode(xml.documentElement, true);
 
