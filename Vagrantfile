@@ -5,9 +5,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # reason for bento: https://bugs.launchpad.net/cloud-images/+bug/1569237
   config.vm.box = "bento/ubuntu-16.04"
 
-  config.vm.network "forwarded_port", guest: 80, host: 8083
-  config.vm.network "forwarded_port", guest: 443, host: 8443
-  config.vm.network "forwarded_port", guest:22, host: 2222, id:'ssh'
+  config.vm.network "forwarded_port", guest: 80, host: 8090
+  config.vm.network "forwarded_port", guest:22, host: 2223, id:'ssh'
 
   config.vm.synced_folder "./", "/var/www",
     owner: "www-data",
