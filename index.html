@@ -115,6 +115,32 @@
 
 
 <script  src="js/contentManager.js"></script>
+<script  src="node_modules/zipcelx/lib/standalone.js"></script>
+<script>
 
+    const config = {
+        filename: 'general-ledger-Q1',
+        sheet: {
+            data: [
+                [{
+                    value: 'Income - Webshop',
+                    type: 'string'
+                }, {
+                    value: 1000,
+                    type: 'number'
+                }],
+                [{
+                    value: 'Income - Webshop 2',
+                    type: 'string'
+                }, {
+                    value: 1001,
+                    type: 'number'
+                }],
+            ]
+        }
+    };
+
+    zipcelx(config);
+</script>
 </body>
 </html>
