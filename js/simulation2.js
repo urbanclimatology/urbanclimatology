@@ -1,5 +1,5 @@
 var balls = [];
-for (var i = 1; i <= 0; i++) {
+for (var i = 1; i <= 10; i++) {
     balls.push({});
 }
 var perfect_ball = {};
@@ -11,22 +11,51 @@ var noHit;
 var simulation;
 let scale = 50;
 let g = 9.81*scale;
-let duration = 1400;
+let duration = 600;
 var svg;
 let start
 let field;
 
+// Create Event Handlers for mouse
+function handleMouseOver() {  // Add interactivity
+
+    // Use D3 to select element, change color and size
+    d3.select(this)
+        .attr("fill", "orange")
+        .attr("r", function(d) { return console.log(d); });
+
+
+    // Specify where to put label of text
+    svg.append("text")
+        .attr("id","t" + this.id)  // Create an id for text so we can select it later for removing on mouseout
+        .attr("cx",this.cx  - 30)
+        .attr("cy",this.cy  - 15)
+        .text(this.id + " " + this.cx + " " + this.cy);
+}
+
+function handleMouseOut(d, i) {
+    // Use D3 to select element, change color back to normal
+    d3.select(this)
+        .attr("fill", "black")
+        .attr("r", 10);
+
+    // Select text by id and then remove
+    //d3.select("#t" + this.id).remove();  // Remove text location
+}
+
+
 let startSimulation2 = function(){
 
-    balls.forEach(function(ball){
-        ball.shape = svg.append("circle")
+    balls.forEach(function(ball, i){
+        ball.shape = svg.selectAll("circle").data([{stupid:"things"}]).enter().append("circle")
             .attr("cx", start.x)
             .attr("cy", start.y)
             .attr("r", 10)
-            .style("opacity", 0);
+            .attr("id",i)
+            .style("opacity", 0)
+            .on("mouseover", handleMouseOver)
+            .on("mouseout", handleMouseOut);
         ball.animate = ballAnimation;
-
-
     });
     perfect_ball.shape = svg.append("circle")
         .attr("cx", 209)
@@ -37,7 +66,8 @@ let startSimulation2 = function(){
     perfect_ball.shape = svg.append("circle")
         .attr("cx", start.x)
         .attr("cy", start.y)
-        .attr("r", 50)
+        .attr("r", 10)
+        .attr("fill","red")
         .style("opacity", 1);
     perfect_ball.animate = ballAnimation;
 
@@ -76,35 +106,33 @@ let startSimulation2 = function(){
 
 }
 
-let ballAnimation = function(duration){
+let ballAnimation = function(duration) {
     let ball = this;
     ball.x_start = start.x;
     ball.y_start = start.y;
 
     ball.shape.transition("ballAnimation").duration(duration).ease(d3.easeLinear).attrTween("cx", function () {
         return function (t) {
-            tsec = t * duration/1000;
-            let x = ball.x_start + ball.vx * tsec;
-            let y = ball.y_start + (-ball.vy * tsec + 1 / 2 * g * tsec * tsec);
-
-            console.log(targetBox);
-            console.log("Ball",new collisionBox(ball.shape));
-
-            if(targetBox.intersects(new collisionBox(ball.shape))){
-                Hit.style("opacity", 1);
-                ball.style("opacity", 0);
-                console.log("hit");
-            }
-
-            return x;
+            tsec = t * duration / 1000;
+            return ball.x_start + ball.vx * tsec;
         }
     }).attrTween("cy", function () {
         return function (t) {
             tsec = t * duration / 1000;
-            let y = ball.y_start + (-ball.vy * tsec + 1 / 2 * g * tsec * tsec);
-            return y;
+            return ball.y_start + (-ball.vy * tsec + 1 / 2 * g * tsec * tsec);
+        }
+    }).styleTween("opacity", function () {
+        return function () {
+            if (targetBox.intersects(new collisionBox(ball.shape))) {
+                Hit.style("opacity", 1);
+                console.log("hit");
+
+                return "0";
+            }
+            return "1";
         }
     });
+}
 
 
 
@@ -163,11 +191,8 @@ d3.xml("svg/Burg.svg").then(function(xml){
 
     // target
     target = svg.select("#Burg");
-    Hit = svg.select("#Feedback_failed").style("opacity", 0);
-    noHit = svg.select("#Feedback_passed").style("opacity", 0);
-
-    console.log(svg.node().getBBox());
-
+    Hit = svg.select("#Feedback_passed").style("opacity", 0);
+    noHit = svg.select("#Feedback_failed").style("opacity", 0);
 
 });
 
