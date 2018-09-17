@@ -17,8 +17,11 @@ let collisionBox = function(shape){
 }
 
     let getRealCoordinates = function(shape){
-    return {
-        x:shape.node().getCTM().a*(shape.node().getCTM().e + shape.node().getBBox().x),
-        y:shape.node().getCTM().d*(shape.node().getCTM().f + shape.node().getBBox().y)
+    console.log(shape.node().getCTM());
+        console.log(shape.node().getBBox());
+
+        return {
+        x:shape.node().getCTM().a*(shape.node().getCTM().e) + shape.node().getBBox().x,
+        y:shape.node().getCTM().d*(shape.node().getCTM().f) + shape.node().getBBox().y
     }
 }
