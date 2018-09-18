@@ -1,7 +1,4 @@
-var balls = [];
-for (var i = 1; i <= 10; i++) {
-    balls.push({});
-}
+
 var perfect_ball = {};
 var simulation;
 var target;
@@ -13,23 +10,72 @@ let scale = 50;
 let g = 9.81*scale;
 let duration = 600;
 var svg;
-let start
+let start;
 let field;
+
+let nr_balls = 10;
+var balls = [];
+
+perfect_vx = 20;
+perfect_vy = 8;
+variance_x = perfect_vx/3;
+variance_y = perfect_vx/3;
+
+
+
+for (let i = 1; i <= nr_balls; i++) {
+    let ball = {
+        id: i,
+        vx: ((perfect_vx-variance_x/2)+Math.random() * (variance_x)) * scale,
+        vy: ((perfect_vy-variance_y/2)+Math.random() * (variance_y)) * scale
+    };
+    ball.children = [];
+    for (let i = 1; i <= nr_balls; i++) {
+        let childBall = {
+            id: i,
+            vx: ((ball.vx-variance_x/2)+Math.random() * (variance_x)) * scale,
+            vy: ((ball.vy-variance_y/2)+Math.random() * (variance_y)) * scale
+        };
+        childBall.children = [];
+        for (let i = 1; i <= nr_balls; i++) {
+            let grandChildBall = {
+                id: i,
+                vx: ((ball.vx-variance_x/2)+Math.random() * (variance_x)) * scale,
+                vy: ((ball.vy-variance_y/2)+Math.random() * (variance_y)) * scale
+            };
+            childBall.children.push(grandChildBall);
+        }
+        ball.children.push(childBall);
+    }
+
+    balls.push(ball);
+}
+
+balls.forEach(function(ball, i){
+
+
+});
+
+console.log(balls);
+
+
 
 // Create Event Handlers for mouse
 function handleMouseOver() {  // Add interactivity
 
+    let self = this;
     // Use D3 to select element, change color and size
     d3.select(this)
         .attr("fill", "orange")
-        .attr("r", function(d) { return console.log(d); });
+        .attr("r", function(d,i,k) { return console.log(d,i,self.r); });
+
 
 
     // Specify where to put label of text
     svg.append("text")
         .attr("id","t" + this.id)  // Create an id for text so we can select it later for removing on mouseout
-        .attr("cx",this.cx  - 30)
-        .attr("cy",this.cy  - 15)
+        .attr("x",self.cx  - 30)
+        .attr("y",self.cy  - 15)
         .text(this.id + " " + this.cx + " " + this.cy);
 }
 
@@ -47,7 +93,7 @@ function handleMouseOut(d, i) {
 let startSimulation2 = function(){
 
     balls.forEach(function(ball, i){
-        ball.shape = svg.selectAll("circle").data([{stupid:"things"}]).enter().append("circle")
+        ball.shape = svg.append("circle")
             .attr("cx", start.x)
             .attr("cy", start.y)
             .attr("r", 10)
@@ -57,11 +103,6 @@ let startSimulation2 = function(){
             .on("mouseout", handleMouseOut);
         ball.animate = ballAnimation;
     });
-    perfect_ball.shape = svg.append("circle")
-        .attr("cx", 209)
-        .attr("cy", 851)
-        .attr("r", 5)
-        .style("opacity", 1);
 
     perfect_ball.shape = svg.append("circle")
         .attr("cx", start.x)
@@ -138,7 +179,7 @@ let ballAnimation = function(duration) {
 
 
 
-
+/**
 d3.xml("svg/Burg.svg").then(function(xml){
     var importedSvg = document.importNode(xml.documentElement, true);
 
@@ -194,6 +235,5 @@ d3.xml("svg/Burg.svg").then(function(xml){
     Hit = svg.select("#Feedback_passed").style("opacity", 0);
     noHit = svg.select("#Feedback_failed").style("opacity", 0);
 
-});
-
+});**/
 
