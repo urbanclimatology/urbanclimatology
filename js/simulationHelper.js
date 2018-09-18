@@ -1,10 +1,10 @@
-let collisionBox = function(shape){
-    let coordinates = getRealCoordinates(shape);
+let collisionBox = function(node){
+    let coordinates = getRealCoordinates(node);
     this.x1 = coordinates.x;
     this.y1 = coordinates.y;
 
-    this.x2 = this.x1 + shape.node().getBBox().width;
-    this.y2 = this.y1 + shape.node().getBBox().height;
+    this.x2 = this.x1 + node.getBBox().width;
+    this.y2 = this.y1 + node.getBBox().height;
 
     this.intersects = function(other) {
         let x1 = Math.max(this.x1,other.x1);
@@ -16,9 +16,9 @@ let collisionBox = function(shape){
     }
 }
 
-let getRealCoordinates = function(shape){
+let getRealCoordinates = function(node){
     return {
-        x:shape.node().getCTM().a*(shape.node().getCTM().e) + shape.node().getBBox().x,
-        y:shape.node().getCTM().d*(shape.node().getCTM().f) + shape.node().getBBox().y
+        x:node.getCTM().a*(node.getCTM().e) + node.getBBox().x,
+        y:node.getCTM().d*(node.getCTM().f) + node.getBBox().y
     }
 }

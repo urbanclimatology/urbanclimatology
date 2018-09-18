@@ -8,163 +8,204 @@ var noHit;
 var simulation;
 let scale = 50;
 let g = 9.81*scale;
-let duration = 600;
+let duration = 500;
 var svg;
 let start;
 let field;
 
-let nr_balls = 10;
-var balls = [];
+let nr_balls = 50;
+var balls_data = [];
 
 perfect_vx = 20;
 perfect_vy = 8;
 variance_x = perfect_vx/3;
 variance_y = perfect_vx/3;
 
+let Ball = function(index,base_vx,base_vy){
+    return {
+        id: index,
+        vx: ((base_vx-variance_x/2)+Math.random() * (variance_x)),
+        vy: ((base_vy-variance_y/2)+Math.random() * (variance_y)),
+        r: 10,
+        children: []
+    }
+}
 
 
 for (let i = 1; i <= nr_balls; i++) {
-    let ball = {
-        id: i,
-        vx: ((perfect_vx-variance_x/2)+Math.random() * (variance_x)) * scale,
-        vy: ((perfect_vy-variance_y/2)+Math.random() * (variance_y)) * scale
-    };
-    ball.children = [];
-    for (let i = 1; i <= nr_balls; i++) {
-        let childBall = {
-            id: i,
-            vx: ((ball.vx-variance_x/2)+Math.random() * (variance_x)) * scale,
-            vy: ((ball.vy-variance_y/2)+Math.random() * (variance_y)) * scale
-        };
-        childBall.children = [];
-        for (let i = 1; i <= nr_balls; i++) {
-            let grandChildBall = {
-                id: i,
-                vx: ((ball.vx-variance_x/2)+Math.random() * (variance_x)) * scale,
-                vy: ((ball.vy-variance_y/2)+Math.random() * (variance_y)) * scale
-            };
+    let ball = new Ball(i,5+Math.random() * 25,5+Math.random() * 25);
+    for (let j = 1; j <= nr_balls; j++) {
+        let childBall = Ball(i+"_"+j, ball.vx,ball.vy);
+        for (let k = 1; k <= nr_balls; k++) {
+            let grandChildBall = Ball(i+"_"+j+"_"+k, childBall.vx,childBall.vy);
             childBall.children.push(grandChildBall);
         }
         ball.children.push(childBall);
     }
-
-    balls.push(ball);
+    balls_data.push(ball);
 }
-
-balls.forEach(function(ball, i){
-
-
-});
-
-console.log(balls);
 
 
 
 // Create Event Handlers for mouse
-function handleMouseOver() {  // Add interactivity
+function handleMouseOver(shape,d) {  // Add interactivity
 
-    let self = this;
     // Use D3 to select element, change color and size
-    d3.select(this)
+    d3.select(shape)
         .attr("fill", "orange")
-        .attr("r", function(d,i,k) { return console.log(d,i,self.r); });
+        .attr("r", function(d) { return d.r*2; })
+        .append("g")
 
-
-
-    // Specify where to put label of text
+    console.log();
     svg.append("text")
-        .attr("id","t" + this.id)  // Create an id for text so we can select it later for removing on mouseout
-        .attr("x",self.cx  - 30)
-        .attr("y",self.cy  - 15)
-        .text(this.id + " " + this.cx + " " + this.cy);
+        .attr('text-anchor', 'middle')
+        .attr("fill", "black")
+        .attr("x", shape.cx.baseVal.value)
+        .attr("y", shape.cy.baseVal.value+d.r*4)
+        .attr('id', 't'+d.id)
+
+        .text(function(){return "Ball: "+d.id});
+
+
+    d3.select(shape)
+        .each(function(){shape.parentNode.appendChild(shape);
+    });
 }
 
-function handleMouseOut(d, i) {
+function handleMouseOut(shape,d) {
     // Use D3 to select element, change color back to normal
-    d3.select(this)
+    d3.select(shape)
         .attr("fill", "black")
-        .attr("r", 10);
+        .attr("r",  function(d) { return d.r; });
 
     // Select text by id and then remove
-    //d3.select("#t" + this.id).remove();  // Remove text location
+    d3.select("#t" + d.id).remove();  // Remove text location
 }
 
 
 let startSimulation2 = function(){
 
-    balls.forEach(function(ball, i){
-        ball.shape = svg.append("circle")
-            .attr("cx", start.x)
-            .attr("cy", start.y)
-            .attr("r", 10)
-            .attr("id",i)
-            .style("opacity", 0)
-            .on("mouseover", handleMouseOver)
-            .on("mouseout", handleMouseOut);
-        ball.animate = ballAnimation;
-    });
-
-    perfect_ball.shape = svg.append("circle")
+    let balls_shapes = svg.selectAll("BallCircle")  // For new circle, go through the update process
+        .data(balls_data)
+        .enter()
+        .append("circle")
+        .attr("class","BallCircle")
         .attr("cx", start.x)
         .attr("cy", start.y)
-        .attr("r", 10)
+        .attr("r", function(d){return d.r})
+        .on("mouseover", function(d){handleMouseOver(this,d)})
+        .on("mouseout", function(d){handleMouseOut(this,d)})
+        .on("click", function(d){
+            handleMouseOver(this,d);
+            svg.selectAll(".BallCircle").style("opacity", 0.5);
+            let balls_shapes_children = svg.selectAll("BallCircleChildren")  // For new circle, go through the update process
+                .data(d.children)
+                .enter()
+                .append("circle")
+                .attr("class","BallCircleChildren",)
+                .attr("cx", start.x)
+                .attr("cy", start.y)
+                .attr("r", function(d){return d.r})
+                .on("mouseover", function(d){handleMouseOver(this,d)})
+                .on("mouseout", function(d){handleMouseOut(this,d)})
+                .on("click", function(d){
+                    svg.selectAll(".BallCircle").style("opacity", 0.25);
+                    svg.selectAll(".BallCircleChildren").style("opacity", 0.5);
+
+                    handleMouseOver(this,d);
+                    let balls_shapes_grand_children = svg.selectAll("BallCircleGrandChildren")  // For new circle, go through the update process
+                        .data(d.children)
+                        .enter()
+                        .append("circle")
+                        .attr("class","BallCircleGrandChildren")
+                        .attr("cx", start.x)
+                        .attr("cy", start.y)
+                        .attr("r", function(d){return d.r})
+                        .on("mouseover", function(d){handleMouseOver(this,d)})
+                        .on("mouseout", function(d){handleMouseOut(this,d)})
+                    perfect_ball_3 = svg.selectAll("BallCircle")  // For new circle, go through the update process
+                        .data( [{
+                            id: "perfect_ball_3",
+                            vx: perfect_vx,
+                            vy: perfect_vy,
+                            r: 10,
+                        }])
+                        .enter()
+                        .append("circle")
+                        .attr("cx", start.x)
+                        .attr("cy", start.y)
+                        .attr("r", function(d){return d.r})
+                        .attr("fill","red")
+                        .style("opacity", 1);
+                    ballAnimation(perfect_ball_3,duration*3);
+                    ballAnimation(balls_shapes_grand_children,duration*3)
+                });
+            perfect_ball_2 = svg.selectAll("BallCircle")  // For new circle, go through the update process
+                .data( [{
+                    id: "perfect_ball_2",
+                    vx: perfect_vx,
+                    vy: perfect_vy,
+                    r: 10,
+                }])
+                .enter()
+                .append("circle")
+                .attr("cx", start.x)
+                .attr("cy", start.y)
+                .attr("r", function(d){return d.r})
+                .attr("fill","red")
+                .style("opacity", 1);
+            ballAnimation(perfect_ball_2,duration*2);
+            ballAnimation(balls_shapes_children,duration*2)
+        });
+
+
+    perfect_ball = svg.selectAll("BallCircle")  // For new circle, go through the update process
+        .data( [{
+            id: "perfect_ball",
+            vx: perfect_vx,
+            vy: perfect_vy,
+            r: 10,
+
+        }])
+        .enter()
+        .append("circle")
+        .attr("cx", start.x)
+        .attr("cy", start.y)
+        .attr("r", function(d){return d.r})
         .attr("fill","red")
         .style("opacity", 1);
-    perfect_ball.animate = ballAnimation;
 
+    targetBox = new collisionBox(target.node());
 
+    ballAnimation(balls_shapes,duration);
+    ballAnimation(perfect_ball,duration);
 
-    balls.forEach(function(ball){
-        ball.shape.style("opacity", 1);
-    });
-
-    perfect_vx = 20;
-    perfect_vy = 8;
-    variance_x = perfect_vx/3;
-    variance_y = perfect_vx/3;
-
-    perfect_ball.vx = perfect_vx * scale;
-    perfect_ball.vy = perfect_vy * scale;
-
-
-    balls.forEach(function(ball){
-        ball.vx = ((perfect_vx-variance_x/2)+Math.random() * (variance_x)) * scale;
-        ball.vy = ((perfect_vy-variance_y/2)+Math.random() * (variance_y)) * scale;
-    });
-
-
-    balls.forEach(function(ball) {
-        ball.animate(duration);
-    });
-
-    perfect_ball.animate(duration);
+    //perfect_ball.animate(perfect_ball.shape,perfect_ball,duration);
 
     d3.transition("ballAnimation").on("end", function(){
-        perfect_ball.shape.style("opacity", 1);
+        perfect_ball.style("opacity", 1);
         console.log("animationEnd");
     });
-    targetBox = new collisionBox(target);
 
 }
 
-let ballAnimation = function(duration) {
-    let ball = this;
-    ball.x_start = start.x;
-    ball.y_start = start.y;
+let ballAnimation = function(ball_shapes,duration) {
 
-    ball.shape.transition("ballAnimation").duration(duration).ease(d3.easeLinear).attrTween("cx", function () {
+    ball_shapes.transition("ballAnimation").duration(duration).ease(d3.easeLinear).attrTween("cx", function (ball) {
         return function (t) {
             tsec = t * duration / 1000;
-            return ball.x_start + ball.vx * tsec;
+            return start.x + ball.vx * scale * tsec;
         }
-    }).attrTween("cy", function () {
+    }).attrTween("cy", function (ball) {
         return function (t) {
             tsec = t * duration / 1000;
-            return ball.y_start + (-ball.vy * tsec + 1 / 2 * g * tsec * tsec);
+            return start.y + (-ball.vy * tsec * scale + 1 / 2 * g * tsec * tsec);
         }
     }).styleTween("opacity", function () {
+        self = this;
+        console.log(self);
         return function () {
-            if (targetBox.intersects(new collisionBox(ball.shape))) {
+            if (targetBox.intersects(new collisionBox(self))) {
                 Hit.style("opacity", 1);
                 console.log("hit");
 
@@ -175,11 +216,6 @@ let ballAnimation = function(duration) {
     });
 }
 
-
-
-
-
-/**
 d3.xml("svg/Burg.svg").then(function(xml){
     var importedSvg = document.importNode(xml.documentElement, true);
 
@@ -193,7 +229,7 @@ d3.xml("svg/Burg.svg").then(function(xml){
     svg = simulation.select("svg");
 
     field = simulation.select("#Background").node().getBBox();
-    start = getRealCoordinates(svg.select("#Flugobjekt"));
+    start = getRealCoordinates(svg.select("#Flugobjekt").node());
 
     var x = d3.scaleLinear().range([0, field.width - start.x-10]);
     var y = d3.scaleLinear().range([0, -field.height + (field.height-start.y+10) ]);
@@ -235,5 +271,5 @@ d3.xml("svg/Burg.svg").then(function(xml){
     Hit = svg.select("#Feedback_passed").style("opacity", 0);
     noHit = svg.select("#Feedback_failed").style("opacity", 0);
 
-});**/
+});
 
