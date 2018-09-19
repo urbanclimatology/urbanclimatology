@@ -12,12 +12,7 @@
     <title>Weather Reconstruction</title>
 </head>
 <body>
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<script src="https://d3js.org/d3.v5.min.js"></script>
+
 
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-4 col-md-3 col-xs-6 mr-0" href="#">Weather Simulation</a>
@@ -82,8 +77,8 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link simulation2"  onclick="contentManager.setContent('simulation2');"  href="#simulation2">
-                    Simulation2
+                <a class="nav-link simulation2"  onclick="contentManager.setContent('simulation');"  href="#simulation">
+                    -> Simulation
                 </a>
             </li>
             <li class="nav-item">
@@ -174,8 +169,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link simulation2"  onclick="contentManager.setContent('simulation2');"  href="#simulation2">
-                            Simulation2
+                        <a class="nav-link simulation"  onclick="contentManager.setContent('simulation');"  href="#simulation">
+                            -> Simulation
                         </a>
                     </li>
                     <li class="nav-item">
@@ -214,7 +209,16 @@
 
 
 
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
 <script  src="js/contentManager.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+<script  src="js/simulationHelper.js"></script>
+<script  src="js/simulation2.js"></script>
 <script>
 
     const config = {

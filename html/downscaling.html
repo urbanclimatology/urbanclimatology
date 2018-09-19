@@ -21,28 +21,34 @@
             An intuitive statistical method is analog downscaling, which assumes that similar
             large-scale conditions lead to similar local weather. If a sufficiently large set of
             conditions is available for both, large-scale variables and local weather, then local weather can be estimated
-            for a given large-scale situation by choosing the most similar case. You can train this approach in the <span class="text-danger">exercise</span>.
-        </p>
-        <p class="card-text">
-            Local precipitation is difficult to forecast, whereas forecasts for large-scale conditions are reliable.
-            Given a sufficiently large pool of potential analog days, i.e.,
-            with data for local precipitation as well as for large-scale predictions,
-            then one can determine the closest analog in the pool according to the similarity of the large-scale variables.
-            Sound familiar? In the exercise on the particle filter we have also selected the closest among model simulations.
-            Similarly as in that exercise, all that is needed is a distance measure.
-            This distance is then evaluated for each case in the pool of analogs.
-            The method is not only useful for forecasting, but also for weather reconstruction,
-            given suitable large-scale predictors (e.g., from a reanalysis) and local information.
-        </p>
-        <p class="card-text">
-            In the <a href="data/Applications_Analog_Exercise.xls" target="_blank">attached sheet</a>
-            you get one year worth of data (far too small a sample, but computationally doable) of
-            local precipitation and three large-scale predictors. We also have these predictors
-            for the preceding month. Use the “Best Analog” approach based on the Eucledian
-            distance (variables are already standardized). You can use R or Excel
-            (this gets tricky and requires you to calculate a distance matrix, hence the layout of the sheet).
-            Check your result against the <a href="data/Applications_Analog_Solution.xls" target="_blank">solution</a>,
-            which also has the actual measurements. How good would you rate your reconstruction?
+            for a given large-scale situation by choosing the most similar case. You can train this approach in the exercise bellow.
         </p>
     </div>
+</div>
+
+<p></p>
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Exercise</h4>
+    <hr>
+    <p class="card-text">
+        Local precipitation is difficult to forecast, whereas forecasts for large-scale conditions are reliable.
+        Given a sufficiently large pool of potential analog days, i.e.,
+        with data for local precipitation as well as for large-scale predictions,
+        then one can determine the closest analog in the pool according to the similarity of the large-scale variables.
+        Sound familiar? In the exercise on the particle filter we have also selected the closest among model simulations.
+        Similarly as in that exercise, all that is needed is a distance measure.
+        This distance is then evaluated for each case in the pool of analogs.
+        The method is not only useful for forecasting, but also for weather reconstruction,
+        given suitable large-scale predictors (e.g., from a reanalysis) and local information.
+    </p>
+    <p class="card-text">
+        In the <a href="data/Applications_Analog_Exercise.xls" target="_blank">attached sheet</a>
+        you get one year worth of data (far too small a sample, but computationally doable) of
+        local precipitation and three large-scale predictors. We also have these predictors
+        for the preceding month. Use the “Best Analog” approach based on the Eucledian
+        distance (variables are already standardized). You can use R or Excel
+        (this gets tricky and requires you to calculate a distance matrix, hence the layout of the sheet).
+        Check your result against the <a href="data/Applications_Analog_Solution.xls" target="_blank">solution</a>,
+        which also has the actual measurements. How good would you rate your reconstruction?
+    </p>
 </div>

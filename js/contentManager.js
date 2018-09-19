@@ -21,6 +21,10 @@ let ContentManager = function(){
         $( ".content" ).html( html );
         $( ".active").removeClass("active");
         $( "." +name).addClass( "active" );
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+        if(simulation){
+            simulation.init();
+        }
     }
 }
 

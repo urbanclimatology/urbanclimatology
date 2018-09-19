@@ -16,7 +16,7 @@
         <p class="card-text">
             In the following, we introduce and practice key concepts of data assimilation
             using the example from the video – the inclined throw.
-            The <span class="text-danger">exercises</span> will guide you through different approaches of data assimilation.
+            The exercises bellow will guide you through different approaches of data assimilation.
         </p>
     </div>
 </div>
@@ -25,43 +25,35 @@
     <h4 class="alert-heading">Exercise (Todo, incomplete)</h4>
     <hr>
     <p class="card-text">
-        a) Score a goal (model: Schiefer Wurf), learning outcome: Understand that the model provides physical consistency, but not reality.
-        (danach Beobachtungen einblenden)
+        a) Score a goal (model: Schiefer Wurf) in the  <a onclick="contentManager.setContent('simulation');" href="#simulation">Simulation</a>,
+        learning outcome: Understand that the model provides physical consistency, but not reality.
     </p>
     <p>
-        b) Particle Filter: Perform 10 members, choose closest, 3 steps
-        (if the 50 members can be downloaded as an ascii file, a solution script in R will also be given)
+        b) Proceed with the next part of the <a onclick="contentManager.setContent('simulation');" href="#simulation">Simulation</a>,
+        Particle Filter: Perform 10 members, choose closest, 3 steps
+        (if the 50 members can be downloaded as an ascii file, a solution script in R will also be given).
     </p>
     <p>
-        c) Kalman Filter
-        Two PDF Files provide an Introduction of the main concept [Reanalysis_DataAssimilation_Introduction.pdf] and of the Kalman Filter [Reanalysis_DataAssimilation_KalmanFilter.pdf].
+        c) Kalman Filter: Two PDF Files provide an Introduction of the main concept
+        <a href="data/Reanalysis_DataAssimilation_Introduction.pdf" target="_blank">Reanalysis Data Assimilation Introduction</a>
+        and of the Kalman Filter (<a href="data/Reanalysis_DataAssimilation_KalmanFilter.pdf" target="_blank">Reanalysis Data Assimilation Kalman Filter</a>).
     </p>
     <p>
         Exercise 1: You have a substance that decays radioactively.
-        You can use the well known model: Nt+1 = Nt e–λ Δt, with λ = 0.5 s-1. In addition, you have observations of a Geiger counter (in counts/s).
+        You can use the well known model:
+        $$N_{t+1} = N_{t} e^{ -\lambda \Delta t}$$
+        with \(\lambda = 0.5 s^{-1}\). In addition, you have observations of a Geiger counter (in counts/s).
         The error of the observation is 2 counts/s, the error of the model is a bit more
-        complex as it is given in an error of the decay constant of 0.025 s-1 (the values per time step are already calculated for you).
-        Open the Excel Sheet [Reanalysis_DataAssimilation_Exercise1.xls], do the assimilation over the first 20 s and compare with the solution [Reanalysis_DataAssimilation_Solution1.xls].
+        complex as it is given in an error of the decay constant of \(0.025 s^{-1}\) (the values per time step are already calculated for you).
+        Open the <a href="data/Reanalysis_DataAssimilation_Exercise1.xls" target="_blank">Excel Sheet Kalman Filter</a>,
+        do the assimilation over the first 20 s and compare with the <a href="data/Reanalysis_DataAssimilation_Solution1.xls" target="_blank">solution</a>.
     </p>
     <p>
-        Exercise 2: Let’s return to the football example. The model is that of the inclined throw used above, with a simple friction term. Have a look at the PDF [Reanalysis_DataAssimilation_Exercise.pdf] and download the Excel-sheet [Reanalysis_DataAssimilation_Exercise2.xls]. The first part of the solution is the algebraic formulation [Reanalysis_DataAssimilation_SolutionAlgebra.pdf]; the numeric solution is give nin the Excel sheet [Reanalysis_DataAssimilation_Solution2.xls].
+        Exercise 2: Let’s return to the football example. The model is that of the inclined
+        throw used above, with a simple friction term. Have a look at the <a href="data/Reanalysis_DataAssimilation_Exercise.pdf" target="_blank">PDF</a>
+        and download the <a href="data/Reanalysis_DataAssimilation_Exercise2.xls" target="_blank">Excel-sheet</a>.
+        The first part of the solution is the <a href="data/Reanalysis_DataAssimilation_SolutionAlgebra.pdf" target="_blank">algebraic formulation</a>;
+        the numeric solution is given in the <a href="data/Reanalysis_DataAssimilation_Solution2.xls" target="_blank">this Excel sheet</a>.
     </p>
 </div>
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h2 class="h3">Exercise</h2>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <form class="form-inline mr-2 mb-md-0">
-            <label class="sr-only" for="verticalSpeed">Name</label>
-            <input type="number" class="form-control mb-2 mr-sm-2" id="verticalSpeed" value="5" placeholder="Vertikalgeschwindigkeit">
-
-            <label class="sr-only" for="horizontalSpeed">Name</label>
-            <input type="number" class="form-control mb-2 mr-sm-2" id="horizontalSpeed" value="10" placeholder="Horizontalgeschwindikeit">
-        </form>
-        <div class="btn-group mr-2">
-            <button class="btn btn-sm btn-outline-secondary" onclick="startSimulation()">Start</button>
-        </div>
-    </div>
-</div>
-<div class="simulation-space">
-</div>
-<script  src="js/simulation1.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script>
