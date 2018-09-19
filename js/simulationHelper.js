@@ -3,8 +3,8 @@ let collisionBox = function(node){
     this.x1 = coordinates.x;
     this.y1 = coordinates.y;
 
-    this.x2 = this.x1 + node.getBBox().width;
-    this.y2 = this.y1 + node.getBBox().height;
+    this.x2 = coordinates.x2;
+    this.y2 = coordinates.y2;
 
     this.intersects = function(other) {
         let x1 = Math.max(this.x1,other.x1);
@@ -17,8 +17,14 @@ let collisionBox = function(node){
 }
 
 let getRealCoordinates = function(node){
+    x = node.getCTM().a*(node.getCTM().e) + node.getBBox().x;
+    y = node.getCTM().d*(node.getCTM().f) + node.getBBox().y;
     return {
-        x:node.getCTM().a*(node.getCTM().e) + node.getBBox().x,
-        y:node.getCTM().d*(node.getCTM().f) + node.getBBox().y
+        x:x,
+        y:y,
+        cx:x +node.getBBox().width/2,
+        cy:y +node.getBBox().height/2,
+        x2:x +node.getBBox().width,
+        y2:y +node.getBBox().height,
     }
 }

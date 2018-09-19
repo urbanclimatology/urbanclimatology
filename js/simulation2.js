@@ -6,7 +6,7 @@ let Simulation = function() {
     var Hit;
     var noHit;
     var simulation;
-    let scale = 50;
+    var scale;
     let g = 9.81 * scale;
     let duration = 500;
     var svg;
@@ -262,44 +262,42 @@ let Simulation = function() {
             field = simulation.select("#Background").node().getBBox();
             start = getRealCoordinates(svg.select("#Flugobjekt").node());
 
-            var x = d3.scaleLinear().range([0, field.width - start.x - 10]);
-            var y = d3.scaleLinear().range([0, -field.height + (field.height - start.y + 10)]);
+            let x_axis_length_pixels = field.width - start.x - 100;
+            let x_axis_domain = 1100;
+            scale = x_axis_length_pixels/x_axis_domain;
+            let y_axis_length_pixels = -start.y;
+            let y_axis_domain = -y_axis_length_pixels/scale+100;
 
-            // define the line
-            var valueline = d3.line()
-                .x(function (d) {
-                    return x(d.close);
-                })
-                .y(function (d) {
-                    return y(d.close);
-                });
+
+            let x = d3.scaleLinear().range([0, x_axis_length_pixels]).domain([0,1000]);
+            let y = d3.scaleLinear().range([0, y_axis_length_pixels]).domain([0,y_axis_domain]);;
+
+
 
             // Add the x Axis
             svg.append("g")
-                .attr("transform", "translate(" + start.x + "," + start.y + ")")
-                .call(d3.axisBottom(x));
+                .attr("transform", "translate(" + start.cx + "," + start.cy + ")")
+                .call(d3.axisBottom(x).ticks(10).tickSize(y_axis_length_pixels)
+                    .tickFormat(function(d){return d;}))
+                .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "2,2");
+            svg.append("text")
+                .attr("transform",
+                    "translate(" + (start.cx + x_axis_length_pixels/2) + "," + (start.y2+20) + ")")
+                .style("text-anchor", "middle")
+                .text("Distance (x) in m");
+
 
             // Add the y Axis
             svg.append("g")
-                .attr("transform", "translate(" + start.x + "," + start.y + ")")
-                .call(d3.axisLeft(y));
-
-
-            // text label for the x axis
+                .attr("transform", "translate(" + start.cx + "," + start.cy + ")")
+                .call(d3.axisLeft(y).ticks(6).tickSize(-x_axis_length_pixels)
+                    .tickFormat(function(d){return d;}))
+                .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "2,2")
             svg.append("text")
                 .attr("transform",
-                    "translate(" + start.x + " ," + field.height + ")")
+                    "translate(" + (start.cx-30) + "," + (start.cy + y_axis_length_pixels/2) + "), rotate(-90)")
                 .style("text-anchor", "middle")
-                .text("X");
-
-            // text label for the y axis
-            svg.append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 0 - 10)
-                .attr("x", 0 - (50))
-                .attr("dy", "1em")
-                .style("text-anchor", "middle")
-                .text("Z");
+                .text("Distance (z) in m");
 
             // target
             target = svg.select("#Burg");
