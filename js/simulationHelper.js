@@ -28,3 +28,20 @@ let getRealCoordinates = function(node){
         y2:y +node.getBBox().height,
     }
 }
+
+let Ball = function (index, base_vx, base_vy, randomize) {
+    let vx = base_vx;
+    let vy = base_vy;
+    if(randomize){
+        vx = ((base_vx - variance_x / 2) + Math.random() * (variance_x));
+        vy = ((base_vy - variance_y / 2) + Math.random() * (variance_y));
+    }
+
+    return {
+        id: index,
+        vx: vx,
+        vy: vy,
+        r: 10,
+        children: []
+    }
+}

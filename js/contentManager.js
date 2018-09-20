@@ -22,8 +22,11 @@ let ContentManager = function(){
         $( ".active").removeClass("active");
         $( "." +name).addClass( "active" );
         MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-        if(simulation){
-            simulation.init();
+        if(simulation1){
+            simulation1.init();
+        }
+        if(simulation2){
+            simulation2.init();
         }
     }
 }
