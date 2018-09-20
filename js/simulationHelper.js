@@ -29,12 +29,12 @@ let getRealCoordinates = function(node){
     }
 }
 
-let Ball = function (index, base_vx, base_vy, randomize) {
+let Ball = function (index, base_vx, base_vy, randomize = false, variance = 10) {
     let vx = base_vx;
     let vy = base_vy;
     if(randomize){
-        vx = ((base_vx - variance_x / 2) + Math.random() * (variance_x));
-        vy = ((base_vy - variance_y / 2) + Math.random() * (variance_y));
+        vx = generateGaussianNormal(base_vx,variance);
+        vy = generateGaussianNormal(base_vy,variance);
     }
 
     return {
@@ -44,4 +44,24 @@ let Ball = function (index, base_vx, base_vy, randomize) {
         r: 10,
         children: []
     }
+}
+
+// Standard Normal with Müller Transform
+function generateGaussianNormal(mean, variance) {
+    var u = 0, v = 0;
+    while(u === 0) {
+        u = Math.random();
+    }
+    while(v === 0) {
+        v = Math.random();
+    }
+    z = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    return z*variance+mean;
+}
+
+function calculateHorizontalPosition(start,speed,t,scale){
+    return start + speed * t * scale
+}
+function calculateVerticalPosition(start,speed,t,scale){
+    return start + (-speed * t + 1 / 2 * 9.81 * t * t ) * scale ;
 }

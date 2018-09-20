@@ -1,6 +1,6 @@
 let Simulation1 = function() {
     let parent = new BaseSimulation();
-    let duration = 50000;
+    let duration = 5000;
     let svg = parent.getSvg;
     let start = parent.getStart;
 

@@ -10,12 +10,12 @@
         </form>
         <div class="btn-group mr-2">
             <button class="btn btn-sm btn-outline-secondary"
-                    onclick="simulation1.start($('#horizontalSpeed').val(),$('#verticalSpeed').val())">
+                    onclick="simulation1.init();
+                    simulation1.start($('#horizontalSpeed').val(),$('#verticalSpeed').val())">
                 Start 1</button>
-            <button class="btn btn-sm btn-outline-secondary" onclick="simulation2.start()">Start 2</button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="simulation2.init();simulation2.start()">Start 2</button>
         </div>
     </div>
 </div>
 <div class="simulation-space">
 </div>
-

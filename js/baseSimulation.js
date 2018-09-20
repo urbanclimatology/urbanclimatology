@@ -6,29 +6,35 @@ function BaseSimulation() {
     var scale;
     var svg;
     var field;
-    var duration;
-
     let g = 9.81;
     let start;
 
     this.init = function () {
+        if($(".simulation-space").children().length > 0){
+            initSVG();
+            return;
+        }
+
         d3.xml("svg/Burg.svg").then(function (xml) {
             let importedSvg = document.importNode(xml.documentElement, true);
-            let simulation = d3.select('.simulation-space');
+            let simulation = d3.select(".simulation-space");
             simulation.each(function () {
                 this.appendChild(importedSvg);
             });
-
-            svg = simulation.select("svg");
-            start = getRealCoordinates(svg.select("#Flugobjekt").node());
-            targetBox = new collisionBox(svg.select("#Burg").node());
-            field = simulation.select("#Background").node().getBBox();
-
-            Hit = svg.select("#Feedback_passed").style("opacity", 0);
-            noHit = svg.select("#Feedback_failed").style("opacity", 0);
-            initAxis();
+            initSVG();
         })
     };
+
+    let initSVG = function(){
+        svg = d3.select(".simulation-space svg");
+        start = getRealCoordinates(svg.select("#Flugobjekt").node());
+        targetBox = new collisionBox(svg.select("#Burg").node());
+        field = d3.select("#Background").node().getBBox();
+
+        Hit = svg.select("#Feedback_passed").style("opacity", 0);
+        noHit = svg.select("#Feedback_failed").style("opacity", 0);
+        initAxis();
+    }
 
     let initAxis = function(){
         let x_axis_length_pixels = field.width - start.x - 100;
@@ -66,31 +72,35 @@ function BaseSimulation() {
     };
 
     this.ballAnimation = function (ball_shapes, duration) {
-
-        ball_shapes.transition("ballAnimation").duration(duration).ease(d3.easeLinear).attrTween("cx", function (ball) {
+        ball_shapes.transition("ballAnimation").duration(duration).ease(d3.easeLinear)
+        .attrTween("cx", function (ball) {
             return function (t) {
-                tsec = t * duration / 1000;
-                let x = start.x + ball.vx * tsec * scale;
-                if(x > field.width+ball.r){
-                    noHit.style("opacity", 1);
-                    ball_shapes.interrupt("ballAnimation");
-                }
-                return x;
+                let tsec = t * duration / 1000;
+                return calculateHorizontalPosition(start.x+ball.r,ball.vx,tsec,scale);
             }
         }).attrTween("cy", function (ball) {
             return function (t) {
+                let tsec = t * duration / 1000;
+                return calculateVerticalPosition(start.y+ball.r,ball.vy,tsec,scale);
+            }
+        }).styleTween("opacity", function (ball,i,shape) {
+            var self = this;
+            return function (t) {
                 tsec = t * duration / 1000;
-                let y = start.y + (-ball.vy * tsec * scale + 1 / 2 * g * tsec * tsec * scale);
-                if(y > field.height+ball.r*10){
+                let x = calculateHorizontalPosition(start.x+ball.r,ball.vx,tsec,scale);
+                let y = calculateVerticalPosition(start.y+ball.r,ball.vy,tsec,scale);
+
+                svg.append("circle")
+                    .attr("cx", x)
+                    .attr("cy", y)
+                    .attr("r", 1)
+                    .attr("opacity",0.5);
+
+                if(x > field.width+ball.r || y > field.height+ball.r ){
                     noHit.style("opacity", 1);
                     ball_shapes.interrupt("ballAnimation");
+                    return "0";
                 }
-                return y;
-            }
-        }).styleTween("opacity", function () {
-            self = this;
-            console.log(self);
-            return function () {
                 if (targetBox.intersects(new collisionBox(self))) {
                     Hit.style("opacity", 1);
                     ball_shapes.interrupt("ballAnimation");
@@ -101,6 +111,7 @@ function BaseSimulation() {
             }
         });
     }
+
     this.hideFeedback = function(){
         console.log(this);
         Hit.style("opacity", 0);

@@ -25,9 +25,6 @@ let ContentManager = function(){
         if(simulation1){
             simulation1.init();
         }
-        if(simulation2){
-            simulation2.init();
-        }
     }
 }
 
