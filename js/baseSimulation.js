@@ -6,6 +6,7 @@ function BaseSimulation() {
     var scale;
     var svg;
     var field;
+    var play_field;
     let g = 9.81;
     let start;
 
@@ -33,6 +34,10 @@ function BaseSimulation() {
 
         Hit = svg.select("#Feedback_passed").style("opacity", 0);
         noHit = svg.select("#Feedback_failed").style("opacity", 0);
+        d3.selectAll("circle").interrupt("ballAnimation");
+        svg.select("#play_field").remove();
+        play_field = svg.append("g").attr("id","play_field");
+
         initAxis();
     }
 
@@ -46,55 +51,61 @@ function BaseSimulation() {
         let x = d3.scaleLinear().range([0, x_axis_length_pixels]).domain([0,x_axis_domain]);
         let y = d3.scaleLinear().range([0, y_axis_length_pixels]).domain([0,y_axis_domain]);;
 
+        let axis = svg.append("g").attr("id","axis");
         //x Axis
-        svg.append("g")
+        axis.append("g")
             .attr("transform", "translate(" + start.cx + "," + start.cy + ")")
             .call(d3.axisBottom(x).ticks(10).tickSize(y_axis_length_pixels)
                 .tickFormat(function(d){return d;}))
             .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "2,2");
-        svg.append("text")
+        axis.append("text")
             .attr("transform",
                 "translate(" + (start.cx + x_axis_length_pixels/2) + "," + (start.y2+20) + ")")
             .style("text-anchor", "middle")
             .text("Distance (x) in m");
 
         //y Axis
-        svg.append("g")
+        axis.append("g")
             .attr("transform", "translate(" + start.cx + "," + start.cy + ")")
             .call(d3.axisLeft(y).ticks(6).tickSize(-x_axis_length_pixels)
                 .tickFormat(function(d){return d;}))
             .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "2,2")
-        svg.append("text")
+        axis.append("text")
             .attr("transform",
                 "translate(" + (start.cx-30) + "," + (start.cy + y_axis_length_pixels/2) + "), rotate(-90)")
             .style("text-anchor", "middle")
             .text("Distance (z) in m");
     };
 
-    this.ballAnimation = function (ball_shapes, duration) {
-        ball_shapes.transition("ballAnimation").duration(duration).ease(d3.easeLinear)
+    this.ballAnimation = function (ball_shapes, duration, handle_hit = true) {
+        ball_shapes.transition("ballAnimation").duration(duration*1000).ease(d3.easeLinear)
         .attrTween("cx", function (ball) {
             return function (t) {
-                let tsec = t * duration / 1000;
-                return calculateHorizontalPosition(start.x+ball.r,ball.vx,tsec,scale);
+                let tsec = t * duration ;
+                return calculateHorizontalPosition(start.cx,ball.vx,tsec,scale);
             }
         }).attrTween("cy", function (ball) {
             return function (t) {
-                let tsec = t * duration / 1000;
-                return calculateVerticalPosition(start.y+ball.r,ball.vy,tsec,scale);
+                let tsec = t * duration;
+                return calculateVerticalPosition(start.cy,ball.vy,tsec,scale);
             }
         }).styleTween("opacity", function (ball,i,shape) {
             var self = this;
             return function (t) {
-                tsec = t * duration / 1000;
-                let x = calculateHorizontalPosition(start.x+ball.r,ball.vx,tsec,scale);
-                let y = calculateVerticalPosition(start.y+ball.r,ball.vy,tsec,scale);
+                tsec = t * duration;
+                let x = calculateHorizontalPosition(start.cx,ball.vx,tsec,scale);
+                let y = calculateVerticalPosition(start.cy,ball.vy,tsec,scale);
 
-                svg.append("circle")
+                play_field.append("circle")
+                    .attr("class", "circleCurve")
                     .attr("cx", x)
                     .attr("cy", y)
                     .attr("r", 1)
                     .attr("opacity",0.5);
+                
+                if(!handle_hit){
+                    return "1";
+                }
 
                 if(x > field.width+ball.r || y > field.height+ball.r ){
                     noHit.style("opacity", 1);
@@ -113,7 +124,6 @@ function BaseSimulation() {
     }
 
     this.hideFeedback = function(){
-        console.log(this);
         Hit.style("opacity", 0);
         noHit.style("opacity", 0);
     }
@@ -122,9 +132,20 @@ function BaseSimulation() {
         return svg;
     }
 
+    this.getPlayField = function(){
+        return play_field;
+    }
+    this.getField = function(){
+        return field;
+    }
     this.getStart = function(){
         return start;
     }
-
+    this.getScale = function(){
+        return scale;
+    }
+    this.getTargetBox = function(){
+        return targetBox;
+    }
 }
 

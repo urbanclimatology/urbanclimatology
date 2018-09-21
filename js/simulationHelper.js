@@ -29,7 +29,7 @@ let getRealCoordinates = function(node){
     }
 }
 
-let Ball = function (index, base_vx, base_vy, randomize = false, variance = 10) {
+let Ball = function (index, base_vx, base_vy, radius = 10, color="black",randomize = false, variance = 10) {
     let vx = base_vx;
     let vy = base_vy;
     if(randomize){
@@ -41,7 +41,8 @@ let Ball = function (index, base_vx, base_vy, randomize = false, variance = 10) 
         id: index,
         vx: vx,
         vy: vy,
-        r: 10,
+        r: radius,
+        color: color,
         children: []
     }
 }

@@ -1,22 +1,24 @@
 let Simulation1 = function() {
     let parent = new BaseSimulation();
-    let duration = 5000;
-    let svg = parent.getSvg;
+    let playField = parent.getPlayField;
     let start = parent.getStart;
 
     this.start = function (vx, vy) {
+        let duration = (parent.getField().width/parent.getScale())/vx;
         parent.hideFeedback();
 
-        let ball = svg().selectAll("BallCircle")  // For new circle, go through the update process
-            .data([new Ball("Ball1", vx, vy, false)])
+        let ball = playField().selectAll("BallCircle")  // For new circle, go through the update process
+            .data([new Ball("Ball1", vx, vy, 10,"black",false)])
             .enter()
             .append("circle")
             .attr("cx", start.x)
             .attr("cy", start.y)
-            .attr("r", function (d) {
-                return d.r
+            .attr("r", function (ball_data) {
+                return ball_data.r
             })
-            .attr("fill", "red")
+            .attr("fill", function (ball_data) {
+                return ball_data.color
+            })
             .style("opacity", 1);
 
         parent.ballAnimation(ball, duration);
@@ -25,7 +27,9 @@ let Simulation1 = function() {
         });
     }
 
-    this.init = parent.init;
+    this.init = function(){
+        parent.init();
+    }
 }
 
 simulation1 = new Simulation1();
