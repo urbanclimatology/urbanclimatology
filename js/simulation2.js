@@ -1,18 +1,18 @@
 let Simulation2 = function() {
     let parent = new BaseSimulation();
-    let nr_steps = 4;
+    let nr_steps = 8;
     let duration;
     let svg = parent.getSvg;
     let start = parent.getStart;
-    var nr_balls = 20;
-
+    var nr_balls = 50;
+    let balls_data = [];
 
     let perfect_vx = 25;
     let perfect_vy = 20;
     let playField = parent.getPlayField;
-    start_variance = 8;
+    let start_variance = 20;
     var variance = function(step){
-        return start_variance/(step+1)^1.5;
+        return start_variance/((step+1)*2);
     };
 
     let initRandomBalls = function(balls, nr_balls,nr_steps, step, parent_vx,parent_vy){
@@ -23,14 +23,14 @@ let Simulation2 = function() {
             parent_speed_x = parent_vx;
             parent_speed_y = parent_vy;
             balls[ball_index] = new Ball((step+1) + "_" + (ball_index+1), parent_speed_x, parent_speed_y,10,"black",true,variance(step));
-            balls[ball_index].children = initRandomBalls(balls[ball_index].children,nr_balls,nr_steps,step+1,balls[ball_index].vx,balls[ball_index].vy);
+            balls[ball_index].children = initRandomBalls;
         }
         return balls;
     };
 
-    let initRandomBallsShape = function(balls_data,step){
+    let initRandomBallsShape = function(step_balls_data,step){
         return playField().selectAll("BallCircle")  // For new circle, go through the update process
-            .data(balls_data)
+            .data(step_balls_data)
             .enter()
             .append("circle")
             .attr("class", "BallCircleLevel"+(step))
@@ -49,14 +49,20 @@ let Simulation2 = function() {
                 handleMouseOver(this, ball_data);
                 for(temp_step = step; temp_step >= 0; temp_step--){
                     console.log(temp_step,step,1/(step+1-temp_step));
-                    playField().selectAll(".BallCircleLevel"+(temp_step)).style("opacity", 1/(step+2-temp_step));
+                    playField().selectAll(".BallCircleLevel"+(temp_step)).style("opacity", 1/((step+2-temp_step)));
                 }
                 playField().selectAll(".BallCircleLevel"+(step)).on("click", function (ball_data) {
                     handleMouseOver(this, ball_data);
                 });
-                playField().selectAll(".circleCurve").style("opacity", 0.1);
-                balls_children = initRandomBallsShape(ball_data.children,step+1);
+                playField().selectAll("#BallCurves").remove();
+                playField().append("g").attr("id","BallCurves");
 
+                children_data = ball_data.children([], nr_balls,nr_steps, step+1, ball_data.vx, ball_data.vy);
+                ball_data.children_data = children_data;
+                balls_children = initRandomBallsShape(children_data,step+1);
+
+
+                console.log(balls_data);
                 parent.ballAnimation(initPerfectBall(step), duration * (step+2),false);
                 parent.ballAnimation(balls_children, duration * (step+2),false)
             });

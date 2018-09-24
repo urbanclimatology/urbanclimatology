@@ -22,8 +22,10 @@ function BaseSimulation() {
             simulation.each(function () {
                 this.appendChild(importedSvg);
             });
+
             initSVG();
         })
+
     };
 
     let initSVG = function(){
@@ -35,9 +37,9 @@ function BaseSimulation() {
         Hit = svg.select("#Feedback_passed").style("opacity", 0);
         noHit = svg.select("#Feedback_failed").style("opacity", 0);
         d3.selectAll("circle").interrupt("ballAnimation");
-        svg.select("#play_field").remove();
-        play_field = svg.append("g").attr("id","play_field");
-
+        svg.select("#Playfield").remove();
+        play_field = svg.append("g").attr("id","Playfield");
+        play_field.append("g").attr("id","BallCurves");
         initAxis();
     }
 
@@ -51,30 +53,34 @@ function BaseSimulation() {
         let x = d3.scaleLinear().range([0, x_axis_length_pixels]).domain([0,x_axis_domain]);
         let y = d3.scaleLinear().range([0, y_axis_length_pixels]).domain([0,y_axis_domain]);;
 
-        let axis = svg.append("g").attr("id","axis");
-        //x Axis
-        axis.append("g")
-            .attr("transform", "translate(" + start.cx + "," + start.cy + ")")
-            .call(d3.axisBottom(x).ticks(10).tickSize(y_axis_length_pixels)
-                .tickFormat(function(d){return d;}))
-            .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "2,2");
-        axis.append("text")
-            .attr("transform",
-                "translate(" + (start.cx + x_axis_length_pixels/2) + "," + (start.y2+20) + ")")
-            .style("text-anchor", "middle")
-            .text("Distance (x) in m");
+        let axis = svg.select("#Axis");
+        if(axis.empty()){
+            axis = svg.append("g").attr("id","Axis");
+            //x Axis
+            axis.append("g")
+                .attr("transform", "translate(" + start.cx + "," + start.cy + ")")
+                .call(d3.axisBottom(x).ticks(10).tickSize(y_axis_length_pixels)
+                    .tickFormat(function(d){return d;}))
+                .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "2,2");
+            axis.append("text")
+                .attr("transform",
+                    "translate(" + (start.cx + x_axis_length_pixels/2) + "," + (start.y2+20) + ")")
+                .style("text-anchor", "middle")
+                .text("Distance (x) in m");
 
-        //y Axis
-        axis.append("g")
-            .attr("transform", "translate(" + start.cx + "," + start.cy + ")")
-            .call(d3.axisLeft(y).ticks(6).tickSize(-x_axis_length_pixels)
-                .tickFormat(function(d){return d;}))
-            .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "2,2")
-        axis.append("text")
-            .attr("transform",
-                "translate(" + (start.cx-30) + "," + (start.cy + y_axis_length_pixels/2) + "), rotate(-90)")
-            .style("text-anchor", "middle")
-            .text("Distance (z) in m");
+            //y Axis
+            axis.append("g")
+                .attr("transform", "translate(" + start.cx + "," + start.cy + ")")
+                .call(d3.axisLeft(y).ticks(6).tickSize(-x_axis_length_pixels)
+                    .tickFormat(function(d){return d;}))
+                .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "2,2")
+            axis.append("text")
+                .attr("transform",
+                    "translate(" + (start.cx-30) + "," + (start.cy + y_axis_length_pixels/2) + "), rotate(-90)")
+                .style("text-anchor", "middle")
+                .text("Distance (z) in m");
+        }
+
     };
 
     this.ballAnimation = function (ball_shapes, duration, handle_hit = true) {
@@ -96,7 +102,7 @@ function BaseSimulation() {
                 let x = calculateHorizontalPosition(start.cx,ball.vx,tsec,scale);
                 let y = calculateVerticalPosition(start.cy,ball.vy,tsec,scale);
 
-                play_field.append("circle")
+                play_field.select("#BallCurves").append("circle")
                     .attr("class", "circleCurve")
                     .attr("cx", x)
                     .attr("cy", y)
