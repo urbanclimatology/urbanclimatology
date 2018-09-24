@@ -29,7 +29,7 @@ let getRealCoordinates = function(node){
     }
 }
 
-let Ball = function (index, base_vx, base_vy, radius = 10, color="black",randomize = false, variance = 10) {
+let Ball = function (index, base_vx, base_vy, radius = 10, color="black",randomize = false, variance = 10, step = 0) {
     let vx = base_vx;
     let vy = base_vy;
     if(randomize){
@@ -43,7 +43,8 @@ let Ball = function (index, base_vx, base_vy, radius = 10, color="black",randomi
         vy: vy,
         r: radius,
         color: color,
-        children: []
+        children: [],
+        step: step
     }
 }
 
@@ -65,4 +66,50 @@ function calculateHorizontalPosition(start,speed,t,scale){
 }
 function calculateVerticalPosition(start,speed,t,scale){
     return start + (-speed * t + 1 / 2 * 9.81 * t * t ) * scale ;
+}
+
+function displayModal(title, content, callback_action, callback_data){
+    $modal = $("#ResultsModal");
+    $modal.find(".modal-title").html(title);
+    $modal.find(".modal-body").html(content);
+    $modal.find(".modal-action").on( "click", function() {
+        callback_action(callback_data);
+    });
+    $modal.modal('show')
+}
+
+function excelExport(ball){
+    const config = {
+        filename: 'ExportWeatherSimulation1',
+        sheet: {
+            data: [
+                [{
+                    value: 't',
+                    type: 'string'
+                }, {
+                    value: 1,
+                    type: 'number'
+                }, {
+                    value: 2,
+                    type: 'number'
+                }],
+                [{
+                    value: 'vx',
+                    type: 'string'
+                }, {
+                    value: ball.vx,
+                    type: 'number'
+                }],
+                [{
+                    value: 'vy',
+                    type: 'string'
+                }, {
+                    value: ball.vy,
+                    type: 'number'
+                }]
+            ]
+        }
+    };
+
+    zipcelx(config);
 }

@@ -21,15 +21,17 @@ let Simulation1 = function() {
             })
             .style("opacity", 1);
 
-        parent.ballAnimation(ball, duration);
-
-        d3.transition("ballAnimation").on("end", function () {
-        });
-    }
+        parent.ballAnimation(ball, duration,true,endCallback);
+    };
 
     this.init = function(){
         parent.init();
     }
+
+    let endCallback = function(ball){
+        displayModal("Test Titel","Test Content", function(ball){excelExport(ball)},ball);
+    }
 }
 
 simulation1 = new Simulation1();
+

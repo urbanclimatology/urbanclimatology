@@ -40,6 +40,9 @@ function BaseSimulation() {
         svg.select("#Playfield").remove();
         play_field = svg.append("g").attr("id","Playfield");
         play_field.append("g").attr("id","BallCurves");
+        play_field.append("g").attr("id","PerfectBallCurve");
+        play_field.append("g").attr("id","Circles");
+
         initAxis();
     }
 
@@ -83,7 +86,7 @@ function BaseSimulation() {
 
     };
 
-    this.ballAnimation = function (ball_shapes, duration, handle_hit = true) {
+    this.ballAnimation = function (ball_shapes, duration, handle_hit = true, end_callback = null) {
         ball_shapes.transition("ballAnimation").duration(duration*1000).ease(d3.easeLinear)
         .attrTween("cx", function (ball) {
             return function (t) {
@@ -95,20 +98,30 @@ function BaseSimulation() {
                 let tsec = t * duration;
                 return calculateVerticalPosition(start.cy,ball.vy,tsec,scale);
             }
-        }).styleTween("opacity", function (ball,i,shape) {
+        }).styleTween("opacity", function (ball) {
             var self = this;
             return function (t) {
                 tsec = t * duration;
                 let x = calculateHorizontalPosition(start.cx,ball.vx,tsec,scale);
                 let y = calculateVerticalPosition(start.cy,ball.vy,tsec,scale);
 
-                play_field.select("#BallCurves").append("circle")
-                    .attr("class", "circleCurve")
-                    .attr("cx", x)
-                    .attr("cy", y)
-                    .attr("r", 1)
-                    .attr("opacity",0.5);
-                
+                if(ball.type == "perfect_ball"){
+                    play_field.select("#PerfectBallCurve").append("circle")
+                        .attr("class", "circleCurve")
+                        .attr("cx", x)
+                        .attr("cy", y)
+                        .attr("r", 1)
+                        .style("fill","red")
+                        .attr("opacity",0.8);
+                }else{
+                    play_field.select("#Curve"+ball.id).append("circle")
+                        .attr("class", "CircleCurve")
+                        .attr("cx", x)
+                        .attr("cy", y)
+                        .attr("r", 1)
+                        .attr("opacity",0.2);
+                }
+
                 if(!handle_hit){
                     return "1";
                 }
@@ -125,6 +138,14 @@ function BaseSimulation() {
                 }
 
                 return "1";
+            }
+        }).on("end", function (ball) {
+            if(end_callback){
+                end_callback(ball);
+            }
+        }).on("interrupt", function (ball) {
+            if (end_callback) {
+                end_callback(ball);
             }
         });
     }
