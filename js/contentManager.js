@@ -23,6 +23,8 @@ let ContentManager = function(){
         $( "." +name).addClass( "active" );
         MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
         if(simulation1){
+            $("input").tooltip('enable');
+
             simulation1.init();
         }
     }

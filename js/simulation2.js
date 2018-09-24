@@ -4,11 +4,11 @@ let Simulation2 = function() {
     let duration;
     let svg = parent.getSvg;
     let start = parent.getStart;
-    var nr_balls = 50;
+    let nr_balls = 50;
     let balls_data = [];
 
     let perfect_vx = 25;
-    let perfect_vy = 20;
+    let perfect_vy = 22;
     let playField = parent.getPlayField;
     let start_variance = 10;
     var variance = function(step){
@@ -99,7 +99,9 @@ let Simulation2 = function() {
             .style("opacity", 1);
     }
 
-    this.start = function () {
+    this.start = function (steps,balls) {
+        nr_steps = ++steps;
+        nr_balls = balls;
         let duration_total = ((parent.getTargetBox().x1-parent.getStart().x)/parent.getScale())/perfect_vx;
         duration = duration_total/nr_steps;
 
@@ -110,9 +112,15 @@ let Simulation2 = function() {
     }
 
     let endCallback = function(ball,i,shape){
-        if(ball.step+1 == nr_steps) {
-            $("#exampleModal").modal('show');
-            console.log($("#exampleModal"));
+        console.log(ball);
+        if(ball.type != "perfect_ball" && ball.step+1 == nr_steps) {
+            let content = "";
+            if(ball.hit){
+                content = "Congratulations, you scored a hit. You may download the data of your shot for further processing.";
+            }else{
+                content = "Unfortunately, you missed. You may download the data of your shot for further processing.";
+            }
+            displayModal("Result",content, function(ball){excelExport(ball)},ball);
         }
     }
 

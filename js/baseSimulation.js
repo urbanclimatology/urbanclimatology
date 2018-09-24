@@ -102,6 +102,8 @@ function BaseSimulation() {
             var self = this;
             return function (t) {
                 tsec = t * duration;
+                ball.hit = false;
+                ball.time = tsec;
                 let x = calculateHorizontalPosition(start.cx,ball.vx,tsec,scale);
                 let y = calculateVerticalPosition(start.cy,ball.vy,tsec,scale);
 
@@ -123,6 +125,9 @@ function BaseSimulation() {
                 }
 
                 if(!handle_hit){
+                    if (targetBox.intersects(new collisionBox(self))) {
+                        ball.hit = true;
+                    }
                     return "1";
                 }
 
@@ -133,6 +138,7 @@ function BaseSimulation() {
                 }
                 if (targetBox.intersects(new collisionBox(self))) {
                     Hit.style("opacity", 1);
+                    ball.hit = true;
                     ball_shapes.interrupt("ballAnimation");
                     return "0";
                 }
@@ -153,6 +159,10 @@ function BaseSimulation() {
     this.hideFeedback = function(){
         Hit.style("opacity", 0);
         noHit.style("opacity", 0);
+    }
+
+    this.isHit = function(){
+        return Hit.style("opacity");
     }
 
     this.getSvg = function(){

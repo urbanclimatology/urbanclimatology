@@ -62,10 +62,16 @@ function generateGaussianNormal(mean, variance) {
 }
 
 function calculateHorizontalPosition(start,speed,t,scale){
-    return start + speed * t * scale
+    return start + calculateRealHorizontalPosition(speed,t) * scale
 }
 function calculateVerticalPosition(start,speed,t,scale){
-    return start + (-speed * t + 1 / 2 * 9.81 * t * t ) * scale ;
+    return start + calculateRealVerticalPosition(speed,t) * scale ;
+}
+function calculateRealHorizontalPosition(speed,t){
+    return speed * t
+}
+function calculateRealVerticalPosition(speed,t){
+    return -speed * t + 1 / 2 * 9.81 * t * t  ;
 }
 
 function displayModal(title, content, callback_action, callback_data){
@@ -79,35 +85,74 @@ function displayModal(title, content, callback_action, callback_data){
 }
 
 function excelExport(ball){
+    console.log(ball);
+
+    let data = [
+        [{
+            value: 'Total Time Elapsed',
+            type: 'string'
+        }, {
+            value: ball.time,
+            type: 'number'
+        }],
+        [{
+            value: 'Successfull Hit',
+            type: 'string'
+        }, {
+            value: ball.hit,
+            type: 'string'
+        }],
+        [{}],
+        [{
+            value: 't in s',
+            type: 'string'
+        },{
+            value: 'x(t) in m',
+            type: 'string'
+        },{
+            value: 'y(t) in m',
+            type: 'string'
+        },{
+            value: 'u(t) in m/s',
+            type: 'string'
+        },{
+            value: 'w(t) in m/s',
+            type: 'string'
+        }]
+    ];
+
+    let step = 0.1;
+    let t=-step;
+    while(t<ball.time){
+        t=t+step;
+        if(t>ball.time){
+            t=ball.time;
+        }
+        data_step =
+            [{
+                value: t,
+                type: 'number'
+            },{
+                value: calculateRealHorizontalPosition(ball.vx,t),
+                type: 'number'
+            },{
+                value: -1*calculateRealVerticalPosition(ball.vy,t),
+                type: 'number'
+            },{
+                value: ball.vx,
+                type: 'number'
+            },{
+                value: ball.vy - 9.81 * t,
+                type: 'number'
+            }];
+        data.push(data_step);
+    }
+
+
     const config = {
         filename: 'ExportWeatherSimulation1',
         sheet: {
-            data: [
-                [{
-                    value: 't',
-                    type: 'string'
-                }, {
-                    value: 1,
-                    type: 'number'
-                }, {
-                    value: 2,
-                    type: 'number'
-                }],
-                [{
-                    value: 'vx',
-                    type: 'string'
-                }, {
-                    value: ball.vx,
-                    type: 'number'
-                }],
-                [{
-                    value: 'vy',
-                    type: 'string'
-                }, {
-                    value: ball.vy,
-                    type: 'number'
-                }]
-            ]
+            data: data
         }
     };
 

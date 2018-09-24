@@ -4,11 +4,14 @@ let Simulation1 = function() {
     let start = parent.getStart;
 
     this.start = function (vx, vy) {
+
+
         let duration = (parent.getField().width/parent.getScale())/vx;
         parent.hideFeedback();
 
+        let ball_data = new Ball("Ball1", vx, vy, 10,"black",false);
         let ball = playField().selectAll("BallCircle")  // For new circle, go through the update process
-            .data([new Ball("Ball1", vx, vy, 10,"black",false)])
+            .data([ball_data])
             .enter()
             .append("circle")
             .attr("cx", start.x)
@@ -20,6 +23,13 @@ let Simulation1 = function() {
                 return ball_data.color
             })
             .style("opacity", 1);
+        playField().select("#BallCurves").selectAll("BallCurve")
+            .data([ball_data])
+            .enter()
+            .append("g")
+            .attr("id",function (ball_data) {
+                return "Curve"+ball_data.id
+            });
 
         parent.ballAnimation(ball, duration,true,endCallback);
     };
@@ -29,7 +39,13 @@ let Simulation1 = function() {
     }
 
     let endCallback = function(ball){
-        displayModal("Test Titel","Test Content", function(ball){excelExport(ball)},ball);
+        let content = "";
+        if(ball.hit){
+            content = "Congratulations, you scored a hit. You may download the data of your shot for further processing.";
+        }else{
+            content = "Unfortunately, you missed. You may download the data of your shot for further processing.";
+        }
+        displayModal("Result",content, function(ball){excelExport(ball)},ball);
     }
 }
 
