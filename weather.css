@@ -17,6 +17,10 @@ body {
     vertical-align: text-bottom;
 }
 
+.img-logo{
+    padding: 2px;
+    height: 40px;
+}
 /*
  * Sidebar
  */
