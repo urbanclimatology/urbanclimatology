@@ -3,6 +3,7 @@ function BaseSimulation() {
     var targetBox;
     var Hit;
     var noHit;
+    var camera;
     var scale;
     var svg;
     var field;
@@ -36,12 +37,15 @@ function BaseSimulation() {
 
         Hit = svg.select("#Feedback_passed").style("opacity", 0);
         noHit = svg.select("#Feedback_failed").style("opacity", 0);
+        camera = svg.select(".Camera").style("opacity", 0);
+
         d3.selectAll("circle").interrupt("ballAnimation");
         svg.select("#Playfield").remove();
         play_field = svg.append("g").attr("id","Playfield");
         play_field.append("g").attr("id","BallCurves");
         play_field.append("g").attr("id","PerfectBallCurve");
         play_field.append("g").attr("id","Circles");
+
 
         initAxis();
     }
@@ -104,22 +108,24 @@ function BaseSimulation() {
                 tsec = t * duration;
                 ball.hit = false;
                 ball.time = tsec;
-                let x = calculateHorizontalPosition(start.cx,ball.vx,tsec,scale);
-                let y = calculateVerticalPosition(start.cy,ball.vy,tsec,scale);
+                ball.x = calculateHorizontalPosition(start.cx,ball.vx,tsec,scale);
+                ball.y = calculateVerticalPosition(start.cy,ball.vy,tsec,scale);
 
                 if(ball.type == "perfect_ball"){
+                    /**
                     play_field.select("#PerfectBallCurve").append("circle")
                         .attr("class", "circleCurve")
                         .attr("cx", x)
                         .attr("cy", y)
                         .attr("r", 1)
                         .style("fill","red")
-                        .attr("opacity",0.8);
+                        .attr("opacity",0.8);**/
+                    return "0";
                 }else{
                     play_field.select("#Curve"+ball.id).append("circle")
                         .attr("class", "CircleCurve")
-                        .attr("cx", x)
-                        .attr("cy", y)
+                        .attr("cx", ball.x)
+                        .attr("cy", ball.y)
                         .attr("r", 1)
                         .attr("opacity",0.2);
                 }
@@ -183,6 +189,9 @@ function BaseSimulation() {
     }
     this.getTargetBox = function(){
         return targetBox;
+    }
+    this.getCamera = function(){
+        return camera;
     }
 }
 

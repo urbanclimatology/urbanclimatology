@@ -59,7 +59,7 @@ let Simulation2 = function() {
                 }
                 handleMouseOver(this, ball_data);
                 for(temp_step = step; temp_step >= 0; temp_step--){
-                    playField().selectAll(".BallCircleLevel"+(temp_step)).style("opacity", 1/((step+2-temp_step)));
+                    playField().selectAll(".BallCircleLevel"+(temp_step)).style("opacity", 1/((step+2-temp_step))*0.8);
                 }
                 playField().selectAll(".BallCircleLevel"+(step)).on("click", function (ball_data) {});
                 playField().selectAll("#BallCurves").remove();
@@ -74,13 +74,13 @@ let Simulation2 = function() {
                 ball_data.children_data = children_data;
                 balls_children = initRandomBallsShape(children_data,step+1);
 
-                parent.ballAnimation(initPerfectBall(step), duration * (step+2),false,endCallback);
+                parent.ballAnimation(initPerfectBall(step+1), duration * (step+2),false,endCallback);
                 parent.ballAnimation(balls_children, duration * (step+2),false,endCallback)
             });
     }
 
     let initPerfectBall = function(step){
-        return playField().selectAll("BallCircle")  // For new circle, go through the update process
+        return playField().selectAll("BallCircle")
             .data([{
                 id: "perfect_ball_"+step,
                 vx: perfect_vx,
@@ -90,13 +90,33 @@ let Simulation2 = function() {
             }])
             .enter()
             .append("circle")
+            .attr("class","PerfectBall")
             .attr("cx", start.x)
             .attr("cy", start.y)
             .attr("r", function (d) {
                 return d.r
             })
             .attr("fill", "red")
-            .style("opacity", 1);
+            .style("opacity", 0)
+            .on("mouseover", function (ball_data) {
+                d3.select(this)
+                    .attr("r", function (ball_data) {
+                        return ball_data.r * 2;
+                    });
+                console.log(step);
+                playField().append("text")
+                    .attr('text-anchor', 'middle')
+                    .attr("fill", "black")
+                    .attr("x", ball_data.x)
+                    .attr("y", ball_data.y + ball_data.r * 4)
+                    .attr('id', 't' + ball_data.id)
+                    .text(function () {
+                        return "Picture " + (step+1) + " of the actual shoot";
+                    });
+            }).on("mouseout", function (ball_data) {
+                handleMouseOut(this, ball_data);
+                d3.select(this).attr("fill", "red");
+            })
     }
 
     this.start = function (steps,balls) {
@@ -112,7 +132,6 @@ let Simulation2 = function() {
     }
 
     let endCallback = function(ball,i,shape){
-        console.log(ball);
         if(ball.type != "perfect_ball" && ball.step+1 == nr_steps) {
             let content = "";
             if(ball.hit){
@@ -121,13 +140,18 @@ let Simulation2 = function() {
                 content = "Unfortunately, you missed. You may download the data of your shot for further processing.";
             }
             displayModal("Result",content, function(ball){excelExport(ball)},ball);
+        }else if(ball.type == "perfect_ball"){
+            playField().node().appendChild(parent.getCamera().node().cloneNode(true));
+            let camera = playField().select("#OriginalCamera");
+
+            camera.attr("id","Camera"+ball.step)
+                .style("opacity", 0.7)
+                .attr("transform","translate("+ball.x+","+ball.y+")");
+            playField().selectAll(".PerfectBall").style("opacity", 1);
         }
     }
 
-    // Create Event Handlers for mouse
-    function handleMouseOver(shape, ball_data) {  // Add interactivity
-
-        // Use D3 to select element, change color and size
+    function handleMouseOver(shape, ball_data) {
         d3.select(shape)
             .attr("fill", "orange")
             .attr("r", function (ball_data) {
@@ -139,8 +163,8 @@ let Simulation2 = function() {
         playField().append("text")
             .attr('text-anchor', 'middle')
             .attr("fill", "black")
-            .attr("x", shape.cx.baseVal.value)
-            .attr("y", shape.cy.baseVal.value + ball_data.r * 4)
+            .attr("x", ball_data.x)
+            .attr("y", ball_data.y + ball_data.r * 4)
             .attr('id', 't' + ball_data.id)
 
             .text(function () {
@@ -155,15 +179,13 @@ let Simulation2 = function() {
     }
 
     function handleMouseOut(shape, ball_data) {
-        // Use D3 to select element, change color back to normal
         d3.select(shape)
             .attr("fill", "black")
             .attr("r", function (ball_data) {
                 return ball_data.r;
             });
 
-        // Select text by id and then remove
-        d3.select("#t" + ball_data.id).remove();  // Remove text location
+        d3.select("#t" + ball_data.id).remove();
 
         playField().select("#Curve"+ball_data.id).selectAll(".CircleCurve").style("opacity", 0.2);
     }
