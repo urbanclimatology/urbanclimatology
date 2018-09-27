@@ -27,7 +27,6 @@ let Simulation2 = function() {
             balls[ball_index] = new Ball((step+1) + "_" + (ball_index+1), startx, starty, parent_speed_x, parent_speed_y,7,"black",randomize,variance(step),step);
             balls[ball_index].children = initRandomBalls;
         }
-        console.log(balls);
         return balls;
     };
 
@@ -120,7 +119,6 @@ let Simulation2 = function() {
                     .attr("r", function (ball_data) {
                         return ball_data.r * 2;
                     });
-                console.log(step);
                 playField().append("text")
                     .attr('text-anchor', 'middle')
                     .attr("fill", "black")
@@ -165,7 +163,7 @@ let Simulation2 = function() {
             .attr('id', 't' + ball_data.id)
 
             .text(function () {
-                return "Ball: " + ball_data.id
+                return "Ball: " + ball_data.id + " x="+Math.ceil(ball_data.x)+" z="+Math.ceil(ball_data.y);
             });
 
 

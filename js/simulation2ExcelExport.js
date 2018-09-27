@@ -3,6 +3,7 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
     let balls_data = p_balls_data;
     let nr_steps = p_nr_steps;
     let duration = p_duration;
+    let total_duration = duration*nr_steps;
     let perfect_ball = p_perfect_ball;
     let nr_balls = balls_data.length;
 
@@ -146,10 +147,10 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
         data = addBallLabels(data);
         data = addLabels(data);
 
-        let step = 0.1;
-        let t=-step;
-        while(t<ball.time){
-            t=t+step;
+        let increment = 0.1;
+        let t=-increment;
+        while(t<total_duration){
+            t=t+increment;
             if(t>ball.time){
                 t=ball.time;
             }
@@ -159,22 +160,30 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
             }];
 
             doForAllBalls(data,row,t,function(row,ball,t){
-                row.push({
-                    value: calculateRealHorizontalPosition(ball.vx,t),
-                    type: 'number'
-                });
-                row.push({
-                    value: -1*calculateRealVerticalPosition(ball.vy,t),
-                    type: 'number'
-                });
-                row.push({
-                    value: ball.vx,
-                    type: 'number'
-                });
-                row.push({
-                    value: ball.vy - 9.81 * t,
-                    type: 'number'
-                });
+                if( t >= ball.step*duration && t <= (ball.step+1)*duration ){
+                    row.push({
+                        value: calculateRealHorizontalPosition(ball.vx,t),
+                        type: 'number'
+                    });
+                    row.push({
+                        value: -1*calculateRealVerticalPosition(ball.vy,t),
+                        type: 'number'
+                    });
+                    row.push({
+                        value: ball.vx,
+                        type: 'number'
+                    });
+                    row.push({
+                        value: ball.vy - 9.81 * t,
+                        type: 'number'
+                    });
+                }
+                else{
+                    for(i=0;i<nr_labels -1;i++){
+                        row.push({});
+                    }
+                }
+
             });
 
             data.push(row);
