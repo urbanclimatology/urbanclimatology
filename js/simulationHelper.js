@@ -29,7 +29,7 @@ let getRealCoordinates = function(node){
     }
 }
 
-let Ball = function (index, base_vx, base_vy, radius = 10, color="black",randomize = false, variance = 10, step = 0) {
+let Ball = function (index, start_x, start_y, base_vx, base_vy, radius = 10, color="black",randomize = false, variance = 10, step = 0) {
     let vx = base_vx;
     let vy = base_vy;
     if(randomize){
@@ -41,10 +41,19 @@ let Ball = function (index, base_vx, base_vy, radius = 10, color="black",randomi
         id: index,
         vx: vx,
         vy: vy,
+        startx: start_x,
+        starty: start_y,
+        x, start_x,
+        y, start_y,
         r: radius,
         color: color,
         children: [],
-        step: step
+        step: step,
+        time: 0,
+        selected: false,
+        distanceToOtherBall: function(other){
+            return Math.sqrt(Math.pow(this.x-other.x,2)+Math.pow(this.y-other.y,2));
+        }
     }
 }
 
@@ -74,6 +83,10 @@ function calculateRealVerticalPosition(speed,t){
     return -speed * t + 1 / 2 * 9.81 * t * t  ;
 }
 
+function calculateVerticalSpeed(initial_speed,t){
+    return initial_speed- 9.81 * t;
+}
+
 function displayModal(title, content, callback_action, callback_data){
     $modal = $("#ResultsModal");
     $modal.find(".modal-title").html(title);
@@ -84,77 +97,3 @@ function displayModal(title, content, callback_action, callback_data){
     $modal.modal('show')
 }
 
-function excelExport(ball){
-    console.log(ball);
-
-    let data = [
-        [{
-            value: 'Total Time Elapsed',
-            type: 'string'
-        }, {
-            value: ball.time,
-            type: 'number'
-        }],
-        [{
-            value: 'Successfull Hit',
-            type: 'string'
-        }, {
-            value: ball.hit,
-            type: 'string'
-        }],
-        [{}],
-        [{
-            value: 't in s',
-            type: 'string'
-        },{
-            value: 'x(t) in m',
-            type: 'string'
-        },{
-            value: 'y(t) in m',
-            type: 'string'
-        },{
-            value: 'u(t) in m/s',
-            type: 'string'
-        },{
-            value: 'w(t) in m/s',
-            type: 'string'
-        }]
-    ];
-
-    let step = 0.1;
-    let t=-step;
-    while(t<ball.time){
-        t=t+step;
-        if(t>ball.time){
-            t=ball.time;
-        }
-        data_step =
-            [{
-                value: t,
-                type: 'number'
-            },{
-                value: calculateRealHorizontalPosition(ball.vx,t),
-                type: 'number'
-            },{
-                value: -1*calculateRealVerticalPosition(ball.vy,t),
-                type: 'number'
-            },{
-                value: ball.vx,
-                type: 'number'
-            },{
-                value: ball.vy - 9.81 * t,
-                type: 'number'
-            }];
-        data.push(data_step);
-    }
-
-
-    const config = {
-        filename: 'ExportWeatherSimulation1',
-        sheet: {
-            data: data
-        }
-    };
-
-    zipcelx(config);
-}

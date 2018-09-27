@@ -13,10 +13,10 @@
                 Start Simulation 1</button>
 
             <label class="sr-only" for="nrSteps">Steps</label>
-            <input type="number" class="form-control mr-sm-2" id="nrSteps" value="3" min="1" max="10" data-toggle="tooltip" data-placement="bottom" title="Number of steps in simulation 2" placeholder="Steps">
+            <input type="number" class="form-control mr-sm-2" id="nrSteps" value="1" min="1" max="10" data-toggle="tooltip" data-placement="bottom" title="Number of steps in simulation 2" placeholder="Steps">
 
             <label class="sr-only" for="nrBalls">Name</label>
-            <input type="number" class="form-control mr-sm-2" id="nrBalls" value="30" min="1" max="50" data-toggle="tooltip" data-placement="bottom" title="Number of balls in simulation 2"  placeholder="Balls">
+            <input type="number" class="form-control mr-sm-2" id="nrBalls" value="3" min="1" max="50" data-toggle="tooltip" data-placement="bottom" title="Number of balls in simulation 2"  placeholder="Balls">
             <button class="btn btn-outline-secondary" onclick="simulation2.init();
                                 simulation2.start($('#nrSteps').val(),$('#nrBalls').val())">Start Simulation 2</button>
         </form>

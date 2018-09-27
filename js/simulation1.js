@@ -1,21 +1,23 @@
 let Simulation1 = function() {
     let parent = new BaseSimulation();
     let playField = parent.getPlayField;
-    let start = parent.getStart;
+    let startPos = parent.getStart;
 
     this.start = function (vx, vy) {
 
-
         let duration = (parent.getField().width/parent.getScale())/vx;
         parent.hideFeedback();
-
-        let ball_data = new Ball("Ball1", vx, vy, 10,"black",false);
-        let ball = playField().selectAll("BallCircle")  // For new circle, go through the update process
+        let ball_data = new Ball("Ball1", startPos().cx,startPos().cy, vx, vy, 10,"black",false);
+        let ball = playField().select("#BallCircles").selectAll("BallCircle")
             .data([ball_data])
             .enter()
             .append("circle")
-            .attr("cx", start.x)
-            .attr("cy", start.y)
+            .attr("cx", function (ball_data) {
+                return ball_data.startx;
+            })
+            .attr("cy", function (ball_data) {
+                return ball_data.starty;
+            })
             .attr("r", function (ball_data) {
                 return ball_data.r
             })
@@ -30,7 +32,6 @@ let Simulation1 = function() {
             .attr("id",function (ball_data) {
                 return "Curve"+ball_data.id
             });
-
         parent.ballAnimation(ball, duration,true,endCallback);
     };
 
@@ -47,6 +48,83 @@ let Simulation1 = function() {
         }
         displayModal("Result",content, function(ball){excelExport(ball)},ball);
     }
+
+    let excelExport = function(ball){
+        console.log(ball);
+
+        let data = [
+            [{
+                value: 'Total Time Elapsed',
+                type: 'string'
+            }, {
+                value: ball.time,
+                type: 'number'
+            }],
+            [{
+                value: 'Successfull Hit',
+                type: 'string'
+            }, {
+                value: ball.hit,
+                type: 'string'
+            }],
+            [{}],
+            [{
+                value: 't in s',
+                type: 'string'
+            },{
+                value: 'x(t) in m',
+                type: 'string'
+            },{
+                value: 'y(t) in m',
+                type: 'string'
+            },{
+                value: 'u(t) in m/s',
+                type: 'string'
+            },{
+                value: 'w(t) in m/s',
+                type: 'string'
+            }]
+        ];
+
+        let step = 0.1;
+        let t=-step;
+        while(t<ball.time){
+            t=t+step;
+            if(t>ball.time){
+                t=ball.time;
+            }
+            data_step =
+                [{
+                    value: t,
+                    type: 'number'
+                },{
+                    value: calculateRealHorizontalPosition(ball.vx,t),
+                    type: 'number'
+                },{
+                    value: -1*calculateRealVerticalPosition(ball.vy,t),
+                    type: 'number'
+                },{
+                    value: ball.vx,
+                    type: 'number'
+                },{
+                    value: ball.vy - 9.81 * t,
+                    type: 'number'
+                }];
+            data.push(data_step);
+        }
+
+
+        const config = {
+            filename: 'ExportWeatherSimulation1',
+            sheet: {
+                data: data
+            }
+        };
+
+        zipcelx(config);
+    }
+
+
 }
 
 simulation1 = new Simulation1();

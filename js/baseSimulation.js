@@ -43,8 +43,11 @@ function BaseSimulation() {
         svg.select("#Playfield").remove();
         play_field = svg.append("g").attr("id","Playfield");
         play_field.append("g").attr("id","BallCurves");
+        play_field.append("g").attr("id","SelectedBallCurves");
+        play_field.append("g").attr("id","SelectedBalls");
+
         play_field.append("g").attr("id","PerfectBallCurve");
-        play_field.append("g").attr("id","Circles");
+        play_field.append("g").attr("id","BallCircles");
 
 
         initAxis();
@@ -91,25 +94,16 @@ function BaseSimulation() {
     };
 
     this.ballAnimation = function (ball_shapes, duration, handle_hit = true, end_callback = null) {
-        ball_shapes.transition("ballAnimation").duration(duration*1000).ease(d3.easeLinear)
-        .attrTween("cx", function (ball) {
-            return function (t) {
-                let tsec = t * duration ;
-                return calculateHorizontalPosition(start.cx,ball.vx,tsec,scale);
-            }
-        }).attrTween("cy", function (ball) {
-            return function (t) {
-                let tsec = t * duration;
-                return calculateVerticalPosition(start.cy,ball.vy,tsec,scale);
-            }
-        }).styleTween("opacity", function (ball) {
-            var self = this;
+        ball_shapes.transition("ballAnimation").duration(duration*1000).ease(d3.easeLinear).styleTween("opacity", function (ball) {
+            let self = this;
             return function (t) {
                 tsec = t * duration;
                 ball.hit = false;
                 ball.time = tsec;
-                ball.x = calculateHorizontalPosition(start.cx,ball.vx,tsec,scale);
-                ball.y = calculateVerticalPosition(start.cy,ball.vy,tsec,scale);
+                ball.x = calculateHorizontalPosition(ball.startx,ball.vx,tsec,scale);
+                ball.y = calculateVerticalPosition(ball.starty,ball.vy,tsec,scale);
+                d3.select(self).attr("cx",ball.x);
+                d3.select(self).attr("cy",ball.y);
 
                 if(ball.type == "perfect_ball"){
                     /**
@@ -130,24 +124,27 @@ function BaseSimulation() {
                         .attr("opacity",0.2);
                 }
 
-                if(!handle_hit){
-                    if (targetBox.intersects(new collisionBox(self))) {
-                        ball.hit = true;
+                if (targetBox.intersects(new collisionBox(self))) {
+                    ball.hit = true;
+                    if(!handle_hit){
+                        return "1";
                     }
+                    Hit.style("opacity", 1);
+                    ball_shapes.interrupt("ballAnimation");
+                    return "0";
+                }
+
+                if(!handle_hit){
                     return "1";
                 }
 
-                if(x > field.width+ball.r || y > field.height+ball.r ){
+                if( ball.x > field.width+ball.r ||  ball.y > field.height+ball.r ){
                     noHit.style("opacity", 1);
                     ball_shapes.interrupt("ballAnimation");
                     return "0";
                 }
-                if (targetBox.intersects(new collisionBox(self))) {
-                    Hit.style("opacity", 1);
-                    ball.hit = true;
-                    ball_shapes.interrupt("ballAnimation");
-                    return "0";
-                }
+
+
 
                 return "1";
             }
@@ -193,5 +190,6 @@ function BaseSimulation() {
     this.getCamera = function(){
         return camera;
     }
+
 }
 
