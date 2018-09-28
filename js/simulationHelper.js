@@ -92,13 +92,21 @@ function calculateVerticalSpeed(initial_speed,t){
     return initial_speed- 9.81 * t;
 }
 
-function displayModal(title, content, callback_action, callback_data){
+function displayModal(title, content, callback_action, callback_data,callback_solution){
     $modal = $("#ResultsModal");
     $modal.find(".modal-title").html(title);
     $modal.find(".modal-body").html(content);
     $modal.find(".modal-action").on( "click", function() {
         callback_action(callback_data);
     });
-    $modal.modal('show')
+    if(typeof callback_solution === "function"){
+        $modal.find(".show-solution").show();
+        $modal.find(".show-solution").on( "click", function() {
+            callback_solution(callback_data);
+        });
+    }
+    $modal.modal('show');
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
 }
 

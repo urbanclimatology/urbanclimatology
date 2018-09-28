@@ -51,7 +51,7 @@ function BaseSimulation() {
 
 
         initAxis();
-    }
+    };
 
     let initAxis = function(){
         let x_axis_length_pixels = field.width - start.x - 100;
@@ -69,9 +69,10 @@ function BaseSimulation() {
             //x Axis
             axis.append("g")
                 .attr("transform", "translate(" + start.cx + "," + start.cy + ")")
-                .call(d3.axisBottom(x).ticks(10).tickSize(y_axis_length_pixels)
+                .call(d3.axisBottom(x).ticks(20).tickSize(y_axis_length_pixels)
                     .tickFormat(function(d){return d;}))
-                .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "2,2");
+                .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "1,2")
+
             axis.append("text")
                 .attr("transform",
                     "translate(" + (start.cx + x_axis_length_pixels/2) + "," + (start.y2+20) + ")")
@@ -81,9 +82,9 @@ function BaseSimulation() {
             //y Axis
             axis.append("g")
                 .attr("transform", "translate(" + start.cx + "," + start.cy + ")")
-                .call(d3.axisLeft(y).ticks(6).tickSize(-x_axis_length_pixels)
+                .call(d3.axisLeft(y).ticks(12).tickSize(-x_axis_length_pixels)
                     .tickFormat(function(d){return d;}))
-                .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "2,2")
+                .selectAll(".tick:not(:first-of-type) line").attr("stroke", "#aaa").attr("stroke-dasharray", "1,2")
             axis.append("text")
                 .attr("transform",
                     "translate(" + (start.cx-30) + "," + (start.cy + y_axis_length_pixels/2) + "), rotate(-90)")

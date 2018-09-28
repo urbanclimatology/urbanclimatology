@@ -3,7 +3,7 @@ let ContentManager = function(){
     let self = this;
 
     this.setContent = function(name){
-        if(true){//!self.loaded[name]){
+        if(!self.loaded[name]){
             jQuery.get( "html/"+name+".html", function( html ) {
                 self.loaded[name] = html;
                 attachHtml(name, html);
@@ -22,9 +22,8 @@ let ContentManager = function(){
         $( ".active").removeClass("active");
         $( "." +name).addClass( "active" );
         MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-        if(simulation1){
+        if(typeof simulation1 !== 'undefined' && name == "simulation"){
             $("input").tooltip('enable');
-
             simulation1.init();
         }
     }

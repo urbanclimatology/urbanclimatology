@@ -40,13 +40,23 @@ let Simulation1 = function() {
     }
 
     let endCallback = function(ball){
+        let model_x = Math.round(ball.vx * 100) / 100;
+        let model_y = Math.round(ball.vy * 100)/100;
+
+        result = "</br></br><p>";
+        result += 'Set horizontal speed \\(u_{0}\\) in m/s: '+model_x+"</br>";
+        result += 'Set horizontal speed \\(w_{0}\\) in m/s: '+model_y+"</br></br>";
+        result += 'Resulting Model:</br>';
+        result += "$$\\binom{x(t)}{z(t)}=\\binom{u_{0} * t}{w_{0} - \\frac{1}{2}gt^{2}}=\\binom{"+model_x+" * t}{"+model_y+" - \\frac{1}{2}gt^{2}}$$";
+        result += "</p>";
+
         let content = "";
         if(ball.hit){
-            content = "Congratulations, you scored a hit. You may download the data of your shot for further processing.";
+            content = "Congratulations, you scored a hit. You may download the data of your shot for further processing."+result;
         }else{
-            content = "Unfortunately, you missed. You may download the data of your shot for further processing.";
+            content = "Unfortunately, you missed. You may download the data of your shot for further processing."+result;
         }
-        displayModal("Result",content, function(ball){excelExport(ball)},ball);
+        displayModal("Result",content, function(ball){excelExport(ball)},ball,false);
     }
 
     let excelExport = function(ball){

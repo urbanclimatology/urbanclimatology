@@ -7,8 +7,8 @@ let Simulation2 = function() {
     let nr_balls = 50;
     let balls_data = [];
 
-    let perfect_vx = 25;
-    let perfect_vy = 22;
+    let perfect_vx = 22;
+    let perfect_vy = 24;
     let playField = parent.getPlayField;
     let start_variance = 10;
     let perfect_ball;
@@ -46,7 +46,7 @@ let Simulation2 = function() {
                 return "BallCircle"+ball_data.id;
             })
             .attr("class", "BallCircleLevel"+(step))
-            .attr("cx", step_balls_data.y)
+            .attr("cx", step_balls_data.x)
             .attr("cy", step_balls_data.y)
             .attr("r", function (ball_data) {
                 return ball_data.r
@@ -164,8 +164,8 @@ let Simulation2 = function() {
 
             .text(function () {
                 return "Ball: " + ball_data.id +
-                    " x="+Math.round(calculateAbsolutRealHorizontalPosition(ball_data.vx,ball_data.time,parent.getStart().x,ball_data.start_x,parent.getScale()))+
-                    " z="+Math.round(calculateAbsolutRealVerticalPosition(ball_data.vy,ball_data.time,parent.getStart().y,ball_data.start_y,parent.getScale()));
+                    " x="+Math.round(calculateAbsolutRealHorizontalPosition(ball_data.vx,ball_data.time,parent.getStart().cx,ball_data.start_x,parent.getScale()))+
+                    " z="+Math.round(calculateAbsolutRealVerticalPosition(ball_data.vy,ball_data.time,parent.getStart().cy,ball_data.start_y,parent.getScale()));
             });
 
 
@@ -189,15 +189,22 @@ let Simulation2 = function() {
     this.init = parent.init;
 
     let endCallback = function(ball){
+        let model_x = Math.round(ball.vx * 100) / 100;
+        let model_y = Math.round((ball.vy + 9.81 * duration*(nr_steps-1)) * 100)/100;
+
+        result = "<p>";
+        result += "You finished the simulation. Your selection let to the following model:</br></br>";
+        result += "$$\\binom{x(t)}{z(t)}=\\binom{u_{0} * t}{w_{0} - \\frac{1}{2}gt^{2}}=\\binom{"+model_x+" * t}{"+model_y+" - \\frac{1}{2}gt^{2}}$$";
+        result += 'Detected horizontal speed \\(u_{0}\\) in m/s: '+model_x+"</br>";
+        result += 'Detected horizontal speed \\(w_{0}\\) in m/s: '+model_y+"</br>";
+        result += 'Euclidean distance to last target picture during the simulation: '+Math.round(ball.distanceToOtherBall(perfect_ball)/parent.getScale()*100)/100+"</br>";
+        result += "</p>";
+
         if(ball.type != "perfect_ball" && ball.step+1 == nr_steps) {
-            let content = "";
-            if(ball.hit){
-                content = "Congratulations, you scored a hit. You may download the data of your shot for further processing.";
-            }else{
-                content = "Unfortunately, you missed. You may download the data of your shot for further processing.";
-            }
-            let excelExport = new Simulation2ExcelExport(ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy);
-            displayModal("Result",content, excelExport.export,ball);
+            let excelExport = new Simulation2ExcelExport(ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy,false);
+            let excelExport_solution = new Simulation2ExcelExport(ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy,true);
+
+            displayModal("Result",result, excelExport.export,ball,excelExport_solution.export);
         }else if(ball.type == "perfect_ball"){
             playField().node().appendChild(parent.getCamera().node().cloneNode(true));
             let camera = playField().select("#OriginalCamera");

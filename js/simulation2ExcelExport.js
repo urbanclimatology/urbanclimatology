@@ -1,4 +1,4 @@
-let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,p_perfect_ball,p_scale,p_start, p_perfect_vx, p_perfect_vy) {
+let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,p_perfect_ball,p_scale,p_start, p_perfect_vx, p_perfect_vy, p_show_solution) {
     let ball = p_ball;
     let scale = p_scale;
     let abs_start = p_start;
@@ -10,12 +10,16 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
     let nr_balls = balls_data.length;
     let perfect_vx = p_perfect_vx;
     let perfect_vy = p_perfect_vy;
+    let show_solution = p_show_solution;
 
     let labels_per_ball = [{
+            value: 'Euclidean distance to target picture',
+            type: 'string'
+    },{
         value: 'x(t) in m',
         type: 'string'
     },{
-        value: 'y(t) in m',
+        value: 'z(t) in m',
         type: 'string'
     },{
         value: 'u(t) in m/s',
@@ -28,6 +32,40 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
     let nr_labels = labels_per_ball.length;
 
     let addHeaderPart = function(data){
+        data.push([{
+            value: 'Results for Simualtion 2',
+            type: 'string'
+        }]);
+
+        data.push([{
+            value: 'Detected horizontal speed u in m/s at start',
+            type: 'string'
+        }, {
+            value: ball.vx,
+            type: 'number'
+        }]);
+        data.push([{
+            value: 'Detected vertical speed w in m/s at start',
+            type: 'string'
+        }, {
+            value: ball.vy + 9.81 * duration*(nr_steps-1),
+            type: 'number'
+        }]);
+        data.push([{
+            value: 'Euclidean distance to last target picture',
+            type: 'string'
+        }, {
+            value: ball.distanceToOtherBall(perfect_ball)/scale,
+            type: 'number'
+        }]);
+
+        data.push([{
+            value: 'Scale factor from pixel to meter in (px/m)',
+            type: 'string'
+        }, {
+            value: scale,
+            type: 'number'
+        }]);
         data.push([{
             value: 'Total Time Elapsed',
             type: 'string'
@@ -49,15 +87,6 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
             value: duration,
             type: 'number'
         }]);
-
-        data.push([{
-            value: 'Euklidsche Distanz to last target picture',
-            type: 'string'
-        }, {
-            value: ball.distanceToOtherBall(perfect_ball),
-            type: 'string'
-        }]);
-
         data.push([{
             value: 'Successfull Hit',
             type: 'string'
@@ -90,7 +119,7 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
         return data;
     };
 
-    let doForAllBalls = function(data,row,t,todo){
+    let doForAllBalls = function(data,row,t,picture_step,todo){
         balls = balls_data;
         while(balls && balls.length) {
             selected_ball = {};
@@ -98,7 +127,7 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
                 if(ball.selected){
                     selected_ball = ball;
                 }
-                todo(row,ball,t);
+                todo(row,ball,t,picture_step);
             });
             balls = selected_ball.children_data;
         }
@@ -112,9 +141,13 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
             type: 'string'
         });
         labels.push({});
-        doForAllBalls(data,labels,0,function(labels,ball,t){
+        doForAllBalls(data,labels,0,false,function(labels,ball,t,picture_step){
+            let label ='Ball ' + ball.id;
+            if(ball.selected){
+                label += " (**Selected**)"
+            }
             labels.push({
-                value: 'Ball ' + ball.id,
+                value: label,
                 type: 'string'
             });
             for(i=0;i<nr_labels-1;i++){
@@ -141,7 +174,7 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
             value: 'z(t) in m',
             type: 'string'
         });
-        doForAllBalls(data,labels,0,function(labels,ball,t){
+        doForAllBalls(data,labels,0,false,function(labels,ball,t,pictur_step){
             labels_per_ball.forEach(function(label){
                 labels.push(label);
             })
@@ -163,6 +196,7 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
         let increment = duration/4;
         let t=-increment;
         let increment_step = 0;
+        let picture_step = false;
         while(t<total_duration){
             t=t+increment;
             if(t>total_duration){
@@ -174,34 +208,60 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
                 type: 'number'
             }];
 
-            console.log("Abs",Math.abs(t % duration) )
-            if(Math.abs(t % duration) < duration/100){
+
+            if(Math.abs(t - duration*increment_step) < duration/100){
+                picture_step = true;
                 t = duration*increment_step;
                 increment_step++;
                 row.push({
-                    value: calculateAbsolutRealHorizontalPosition(perfect_vx,t,abs_start.x,abs_start.x,scale),
+                    value: calculateAbsolutRealHorizontalPosition(perfect_vx,t,abs_start.cx,abs_start.cx,scale),
                     type: 'number'
                 });
                 row.push({
-                    value: calculateAbsolutRealVerticalPosition(perfect_vy,t,abs_start.y,abs_start.y,scale),
+                    value: calculateAbsolutRealVerticalPosition(perfect_vy,t,abs_start.cy,abs_start.cy,scale),
                     type: 'number'
                 });
             }
             else {
+                picture_step = false;
                 row.push({});
                 row.push({});
             }
 
 
-            doForAllBalls(data,row,t,function(row,ball,t){
+            doForAllBalls(data,row,t,picture_step,function(row,ball,t,picture_step){
                 rel_t = t - ball.step*duration;
-                if( rel_t >= 0 && rel_t <= duration ){
+                if( rel_t >= 0 && (Math.abs(rel_t - duration<0.000001)) ){
+                    var_ball_x = calculateAbsolutRealHorizontalPosition(ball.vx,rel_t,abs_start.cx,ball.start_x,scale);
+                    var_ball_y = calculateAbsolutRealVerticalPosition(ball.vy,rel_t,abs_start.cy,ball.start_y,scale);
+                    if(picture_step){
+                        perfect_x = calculateAbsolutRealHorizontalPosition(perfect_vx,t,abs_start.cx,abs_start.cx,scale);
+                        perfect_y = calculateAbsolutRealVerticalPosition(perfect_vy,t,abs_start.cy,abs_start.cy,scale);
+
+                        if(show_solution){
+                            row.push({
+                                value: Math.sqrt(Math.pow(var_ball_x-perfect_x,2)+Math.pow(var_ball_y-perfect_y,2)),
+                                type: 'number'
+                            });
+                        }
+                        else{
+                            row.push({
+                                value: "** Todo Calculate Euclidian distance to Picture **",
+                                type: 'string'
+                            });
+                        }
+                    }else{
+                        row.push({
+                            value: "-",
+                            type: 'string'
+                        });
+                    }
                     row.push({
-                        value: calculateAbsolutRealHorizontalPosition(ball.vx,rel_t,abs_start.x,ball.start_x,scale),
+                        value: var_ball_x,
                         type: 'number'
                     });
                     row.push({
-                        value: calculateAbsolutRealVerticalPosition(ball.vy,rel_t,abs_start.y,ball.start_y,scale),
+                        value: var_ball_y,
                         type: 'number'
                     });
                     row.push({
@@ -209,7 +269,7 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
                         type: 'number'
                     });
                     row.push({
-                        value: ball.vy - 9.81 * t,
+                        value: ball.vy - 9.81 * rel_t,
                         type: 'number'
                     });
                 }
