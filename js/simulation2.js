@@ -159,11 +159,13 @@ let Simulation2 = function() {
             .attr('text-anchor', 'middle')
             .attr("fill", "black")
             .attr("x", ball_data.x)
-            .attr("y", ball_data.y + ball_data.r * 4)
+            .attr("y", ball_data.y - ball_data.r * 4)
             .attr('id', 't' + ball_data.id)
 
             .text(function () {
-                return "Ball: " + ball_data.id + " x="+Math.ceil(ball_data.x)+" z="+Math.ceil(ball_data.y);
+                return "Ball: " + ball_data.id +
+                    " x="+Math.round(calculateAbsolutRealHorizontalPosition(ball_data.vx,ball_data.time,parent.getStart().x,ball_data.start_x,parent.getScale()))+
+                    " z="+Math.round(calculateAbsolutRealVerticalPosition(ball_data.vy,ball_data.time,parent.getStart().y,ball_data.start_y,parent.getScale()));
             });
 
 
@@ -194,7 +196,7 @@ let Simulation2 = function() {
             }else{
                 content = "Unfortunately, you missed. You may download the data of your shot for further processing.";
             }
-            let excelExport = new Simulation2ExcelExport(ball,balls_data,nr_steps,duration,perfect_ball);
+            let excelExport = new Simulation2ExcelExport(ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy);
             displayModal("Result",content, excelExport.export,ball);
         }else if(ball.type == "perfect_ball"){
             playField().node().appendChild(parent.getCamera().node().cloneNode(true));

@@ -82,7 +82,12 @@ function calculateRealHorizontalPosition(speed,t){
 function calculateRealVerticalPosition(speed,t){
     return -speed * t + 1 / 2 * 9.81 * t * t  ;
 }
-
+function calculateAbsolutRealHorizontalPosition(speed,t,abs_start_x,rel_start_x,scale){
+    return calculateHorizontalPosition(rel_start_x-abs_start_x,speed,t,scale)/scale;
+}
+function calculateAbsolutRealVerticalPosition(speed,t,abs_start_y,rel_start_y,scale){
+    return -calculateVerticalPosition(rel_start_y-abs_start_y,speed,t,scale)/scale;
+}
 function calculateVerticalSpeed(initial_speed,t){
     return initial_speed- 9.81 * t;
 }
