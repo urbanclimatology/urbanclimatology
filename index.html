@@ -14,124 +14,19 @@
 <body>
 
 
-<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-4 col-md-3 col-xs-6 mr-0" href="#">Weather Simulation</a>
+<nav class="navbar navbar-dark fixed-top bg-dark flex-xs-nowrap p-0 shadow">
     <nav class="navbar navbar-dark bg-dark d-lg-none">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#MainNavigation" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
     </nav>
+    <a class="navbar-brand d-none d-sm-block ml-3" href="#" onclick="contentManager.setContent('introduction');">Weather Reconstruction</a>
+
     <img src="svg/unibe_trans.gif" class="img-logo">
 </nav>
-<div class="collapse d-lg-none" id="navbarToggleExternalContent">
-    <div class="bg-dark p-4">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link introduction" onclick="contentManager.setContent('introduction');" href="#introduction">
-                    Introduction
-                </a>
-            </li>
-        </ul>
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Climate Data</span>
-        </h6>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link climate-data-entry" onclick="contentManager.setContent('climate-data-entry');" href="#climate-data-entry">
-                    Intro
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link digitise"  onclick="contentManager.setContent('digitise');"  href="#digitise">
-                    Digitise
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link process"  onclick="contentManager.setContent('process');"  href="#process">
-                    Process
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link quality-control"  onclick="contentManager.setContent('quality-control');"  href="#quality-control">
-                    Quality Control
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link homogenize"  onclick="contentManager.setContent('homogenize');"  href="#homogenize">
-                    Homogenize
-                </a>
-            </li>
-
-        </ul>
-
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Reanalyses</span>
-        </h6>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link reanalyses-entry"  onclick="contentManager.setContent('reanalyses-entry');"  href="#reanalyses-entry">
-                    Intro
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link assimilation"  onclick="contentManager.setContent('assimilation');"  href="#assimilation">
-                    Data Assimilation
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link simulation"  onclick="contentManager.setContent('simulation');"  href="#simulation">
-                    -> Simulation
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link reanalysis"  onclick="contentManager.setContent('reanalysis');"  href="#reanalysis">
-                    Reanalysis Data Sets
-                </a>
-            </li>
-        </ul>
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Downscaling and application </span>
-        </h6>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link downscaling-entry"  onclick="contentManager.setContent('downscaling-entry');"  href="#downscaling-entry">
-                    Intro
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link downscaling"  onclick="contentManager.setContent('downscaling');"  href="#downscaling">
-                    Downscaling
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link application"  onclick="contentManager.setContent('application');"  href="#application">
-                    Application
-                </a>
-            </li>
-        </ul>
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>About</span>
-        </h6>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link contact"  onclick="contentManager.setContent('contact');"  href="#contact">
-                    Contact
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link impressum"  onclick="contentManager.setContent('impressum');"  href="#impressum">
-                    Impressum
-                </a>
-            </li>
-        </ul>
-    </div>
-    </nav>
-    </div>
-</div>
-
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-md-2 bg-light sidebar d-none d-lg-block">
+        <nav class="col-md-2 bg-light sidebar" id="MainNavigation">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
