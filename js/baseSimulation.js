@@ -7,6 +7,7 @@ function BaseSimulation() {
     var scale;
     var svg;
     var field;
+    let clip;
     var play_field;
     let g = 9.81;
     let start;
@@ -20,6 +21,7 @@ function BaseSimulation() {
         d3.xml("svg/Burg.svg").then(function (xml) {
             let importedSvg = document.importNode(xml.documentElement, true);
             let simulation = d3.select(".simulation-space");
+
             simulation.each(function () {
                 this.appendChild(importedSvg);
             });
@@ -31,6 +33,8 @@ function BaseSimulation() {
 
     let initSVG = function(){
         svg = d3.select(".simulation-space svg");
+
+
         start = getRealCoordinates(svg.select("#Flugobjekt").node());
         targetBox = new collisionBox(svg.select("#Burg").node());
         field = d3.select("#Background").node().getBBox();
@@ -48,7 +52,6 @@ function BaseSimulation() {
 
         play_field.append("g").attr("id","PerfectBallCurve");
         play_field.append("g").attr("id","BallCircles");
-
 
         initAxis();
     };

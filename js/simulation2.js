@@ -12,9 +12,11 @@ let Simulation2 = function() {
     let playField = parent.getPlayField;
     let start_variance = 10;
     let perfect_ball;
+    let last_perfect_ball = null;
+    let current_selected_ball = null;
 
     let variance = function(step){
-        return start_variance/(step+1);
+        return start_variance/((step*0.5)+1);
     };
 
     let initRandomBalls = function(balls, nr_balls,nr_steps, step, startx, starty, parent_vx,parent_vy, randomize = true){
@@ -80,7 +82,7 @@ let Simulation2 = function() {
                 let SelectedBalls = playField().select("#SelectedBalls");
                 SelectedBalls.node().prepend(SelectedBall.node().cloneNode(true));
                 playField().selectAll("#SelectedBalls circle").style("opacity",1).style("fill","green").attr("r", ball_data.r * 1.5);
-
+                current_selected_ball = jQuery.extend(true, {},ball_data);
 
                 playField().append("g").attr("id","BallCurves");
                 //playField().append("g").attr("id","PerfectBallCurve");
@@ -93,6 +95,8 @@ let Simulation2 = function() {
                 ball_data.children_data = children_data;
                 balls_children = initRandomBallsShape(children_data,step+1);
 
+                last_perfect_ball = jQuery.extend(true, {},perfect_ball);
+
                 let new_perfect_ball = initPerfectBall(step+1,perfect_ball.x,perfect_ball.y,perfect_ball.vy,perfect_ball.time);
                 parent.ballAnimation(new_perfect_ball, duration,false,endCallback);
                 parent.ballAnimation(balls_children, duration,false,endCallback)
@@ -100,7 +104,7 @@ let Simulation2 = function() {
     }
 
     let initPerfectBall = function(step,startx,starty,start_vy,time){
-        perfect_ball = new Ball("perfect_ball_"+step,startx,starty,perfect_vx,calculateVerticalSpeed(start_vy,time),10,"black");
+        perfect_ball = new Ball("perfect_ball_"+step,startx,starty,perfect_vx,calculateVerticalSpeed(start_vy,time),10,"black",false,0, step);
         perfect_ball.type = "perfect_ball";
         return playField().selectAll("BallCircle")
             .data([perfect_ball])
@@ -189,23 +193,64 @@ let Simulation2 = function() {
     this.init = parent.init;
 
     let endCallback = function(ball){
-        let model_x = Math.round(ball.vx * 100) / 100;
-        let model_y = Math.round((ball.vy + 9.81 * duration*(nr_steps-1)) * 100)/100;
 
-        result = "<p>";
-        result += "You finished the simulation. Your selection let to the following model:</br></br>";
-        result += "$$\\binom{x(t)}{z(t)}=\\binom{u_{0} * t}{w_{0} - \\frac{1}{2}gt^{2}}=\\binom{"+model_x+" * t}{"+model_y+" - \\frac{1}{2}gt^{2}}$$";
-        result += 'Detected horizontal speed \\(u_{0}\\) in m/s: '+model_x+"</br>";
-        result += 'Detected horizontal speed \\(w_{0}\\) in m/s: '+model_y+"</br>";
-        result += 'Euclidean distance to last target picture during the simulation: '+Math.round(ball.distanceToOtherBall(perfect_ball)/parent.getScale()*100)/100+"</br>";
-        result += "</p>";
+
 
         if(ball.type != "perfect_ball" && ball.step+1 == nr_steps) {
-            let excelExport = new Simulation2ExcelExport(ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy,false);
-            let excelExport_solution = new Simulation2ExcelExport(ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy,true);
+            let model_vx = Math.round(ball.vx * 100) / 100;
+            let model_vy = Math.round((ball.vy + 9.81 * duration*(nr_steps-1)) * 100)/100;
+
+            var_ball_x = calculateAbsolutRealHorizontalPosition(ball.vx,duration,parent.getStart().cx,ball.start_x,parent.getScale());
+            var_ball_y = calculateAbsolutRealVerticalPosition(ball.vy,duration,parent.getStart().cy,ball.start_y,parent.getScale());
+
+            perfect_x = calculateAbsolutRealHorizontalPosition(perfect_vx,duration*(ball.step+1),parent.getStart().cx,parent.getStart().cx,parent.getScale());
+            perfect_y = calculateAbsolutRealVerticalPosition(perfect_vy,duration*(ball.step+1),parent.getStart().cy,parent.getStart().cy,parent.getScale());
+            console.log(var_ball_x,var_ball_y,perfect_x,perfect_y);
+
+            result = "<p>";
+            result += "You finished the simulation. Your selection let to the following model:</br></br>";
+            result += "$$\\binom{x(t)}{z(t)}=\\binom{u_{0} * t}{w_{0} - \\frac{1}{2}gt^{2}}=\\binom{"+model_vx+" * t}{"+model_vy+" - \\frac{1}{2}gt^{2}}$$";
+            result += 'Detected initial horizontal speed \\(u_{0}\\) in m/s: '+model_vx+"</br>";
+            result += 'Detected initial vertical speed \\(w_{0}\\) in m/s: '+model_vy+"</br>";
+            result += 'Euclidean distance to last target picture during the simulation: '+Math.round(Math.sqrt(Math.pow(var_ball_x-perfect_x,2)+Math.pow(var_ball_y-perfect_y,2))*100)/100+"</br>";
+            result += "</p>";
+
+            let excelExport = new Simulation2ExcelExport(ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy,false,true);
+            let excelExport_solution = new Simulation2ExcelExport(ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy,true,true);
 
             displayModal("Result",result, excelExport.export,ball,excelExport_solution.export);
-        }else if(ball.type == "perfect_ball"){
+        } else if(ball.type == "perfect_ball"){
+            if((ball.step+1) === 1){
+                result = "<p>";
+                result += "This is the first step in the simulation. You can download the data of the balls the calculate which one too chose (hopefully the one with the smallest euclidean distance).";
+                let excelExport = new Simulation2ExcelExport(ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy,false,false);
+                displayModal("Result",result, excelExport.export);
+            }else if(ball.step+1 < nr_steps){
+
+                let model_vx = Math.round(current_selected_ball.vx * 100) / 100;
+                let model_vy = Math.round((current_selected_ball.vy + 9.81 * duration*(ball.step-1)) * 100)/100;
+
+                var_ball_x = calculateAbsolutRealHorizontalPosition(current_selected_ball.vx,duration,parent.getStart().cx,current_selected_ball.start_x,parent.getScale());
+                var_ball_y = calculateAbsolutRealVerticalPosition(current_selected_ball.vy,duration,parent.getStart().cy,current_selected_ball.start_y,parent.getScale());
+
+                perfect_x = calculateAbsolutRealHorizontalPosition(perfect_vx,duration*ball.step,parent.getStart().cx,parent.getStart().cx,parent.getScale());
+                perfect_y = calculateAbsolutRealVerticalPosition(perfect_vy,duration*ball.step,parent.getStart().cy,parent.getStart().cy,parent.getScale());
+
+                result = "<p>";
+                result += "You proceeded one step in the simulation. Your selection let to the following temporary model:</br></br>";
+                result += "$$\\binom{x(t)}{z(t)}=\\binom{u_{0} * t}{w_{0} - \\frac{1}{2}gt^{2}}=\\binom{"+model_vx+" * t}{"+model_vy+" - \\frac{1}{2}gt^{2}}$$";
+                result += 'Initial horizontal speed of selected ball ('+current_selected_ball.id+')  \\(u_{0}\\) in m/s: '+model_vx+"</br>";
+                result += 'Initial vertical speed of selected ball ('+current_selected_ball.id+') \\(w_{0}\\) in m/s: '+model_vy+"</br>";
+                console.log(current_selected_ball);
+                console.log(last_perfect_ball);
+
+                result += 'Euclidean distance from selected ball ('+current_selected_ball.id+') to last target picture: '+Math.round(Math.sqrt(Math.pow(var_ball_x-perfect_x,2)+Math.pow(var_ball_y-perfect_y,2))*100)/100+"</br>";
+                result += "</p>";
+
+                let excelExport = new Simulation2ExcelExport(current_selected_ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy,false,false);
+                displayModal("Data of Step: "+(ball.step+1),result, excelExport.export);
+            }
+
             playField().node().appendChild(parent.getCamera().node().cloneNode(true));
             let camera = playField().select("#OriginalCamera");
 
@@ -213,6 +258,7 @@ let Simulation2 = function() {
                 .style("opacity", 0.7)
                 .attr("transform","translate("+ball.x+","+ball.y+")");
             playField().selectAll(".PerfectBall").style("opacity", 1);
+
         }
     }
 }

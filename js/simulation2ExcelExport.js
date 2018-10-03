@@ -1,4 +1,4 @@
-let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,p_perfect_ball,p_scale,p_start, p_perfect_vx, p_perfect_vy, p_show_solution) {
+let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,p_perfect_ball,p_scale,p_start, p_perfect_vx, p_perfect_vy, p_show_solution,p_show_summary) {
     let ball = p_ball;
     let scale = p_scale;
     let abs_start = p_start;
@@ -11,6 +11,7 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
     let perfect_vx = p_perfect_vx;
     let perfect_vy = p_perfect_vy;
     let show_solution = p_show_solution;
+    let show_summary = p_show_summary;
 
     let labels_per_ball = [{
             value: 'Euclidean distance to target picture',
@@ -32,6 +33,17 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
     let nr_labels = labels_per_ball.length;
 
     let addHeaderPart = function(data){
+        data.push([{
+            value: 'Simualation Data of Step '+(ball.step+1),
+            type: 'string'
+        }]);
+
+        data.push([{}]);
+
+        return data;
+    };
+
+    let addSummaryHeaderPart = function(data){
         data.push([{
             value: 'Results for Simualtion 2',
             type: 'string'
@@ -185,10 +197,13 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
     };
 
     this.export = function(){
-        console.log(ball,balls_data,nr_steps,duration);
-
         let data = [];
-        data = addHeaderPart(data);
+        if(show_summary){
+            data = addSummaryHeaderPart(data);
+        }else{
+            data = addHeaderPart(data);
+        }
+
         data = addStepLabels(data);
         data = addBallLabels(data);
         data = addLabels(data);
@@ -210,7 +225,9 @@ let Simulation2ExcelExport = function(p_ball,p_balls_data,p_nr_steps,p_duration,
 
 
             if(Math.abs(t - duration*increment_step) < duration/100){
-                picture_step = true;
+                if(t != 0){
+                    picture_step = true;
+                }
                 t = duration*increment_step;
                 increment_step++;
                 row.push({
