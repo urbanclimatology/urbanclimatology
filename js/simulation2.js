@@ -143,7 +143,10 @@ let Simulation2 = function() {
     this.start = function (steps,balls) {
         nr_steps = ++steps;
         nr_balls = balls;
-        let duration_total = ((parent.getTargetBox().x1-parent.getStart().x)/parent.getScale())/perfect_vx;
+        last_perfect_ball = null;
+        current_selected_ball = null;
+        history_of_selected_balls = [];
+        duration_total = ((parent.getTargetBox().x1-parent.getStart().x)/parent.getScale())/perfect_vx;
         duration = duration_total/nr_steps;
 
         balls_data = initRandomBalls([],nr_balls,nr_steps,0,start_pos().cx,start_pos().cy,perfect_vx,perfect_vy);
@@ -201,7 +204,7 @@ let Simulation2 = function() {
         if(ball.type != "perfect_ball" && ball.step+1 == nr_steps) {
             let model_vx = Math.round(ball.vx * 100) / 100;
             let model_vy = Math.round((ball.vy + 9.81 * duration*(nr_steps-1)) * 100)/100;
-
+            history_of_selected_balls.push(ball);
             result = "<p>";
             result += "You finished the simulation.</br></br>";
 
@@ -243,7 +246,7 @@ let Simulation2 = function() {
                 result += calculateEuclidianDistanceSummaryFromSelectedBalls(ball);
                 result += "</p>";
 
-                let excelExport = new Simulation2ExcelExport(current_selected_ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy,true,false);
+                let excelExport = new Simulation2ExcelExport(current_selected_ball,balls_data,nr_steps,duration,perfect_ball,parent.getScale(),parent.getStart(), perfect_vx, perfect_vy,false,false);
                 displayModal("Data of Step: "+(ball.step+1),result, excelExport.export);
             }
 

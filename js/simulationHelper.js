@@ -104,6 +104,8 @@ function displayModal(title, content, callback_action, callback_data,callback_so
         $modal.find(".show-solution").on( "click", function() {
             callback_solution(callback_data);
         });
+    }else{
+        $modal.find(".show-solution").hide();
     }
     $modal.modal('show');
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
