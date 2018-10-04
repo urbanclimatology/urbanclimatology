@@ -203,7 +203,7 @@ let Simulation2 = function() {
             let model_vy = Math.round((ball.vy + 9.81 * duration*(nr_steps-1)) * 100)/100;
 
             result = "<p>";
-            result += "You finished the simulation. ";
+            result += "You finished the simulation.</br></br>";
 
             /**    "Your selection let to the following model:</br></br>";
             result += "$$\\binom{x(t)}{z(t)}=\\binom{u_{0} * t}{w_{0} - \\frac{1}{2}gt^{2}}=\\binom{"+model_vx+" * t}{"+model_vy+" - \\frac{1}{2}gt^{2}}$$";**/
@@ -232,7 +232,7 @@ let Simulation2 = function() {
 
 
                 result = "<p>";
-                result += "You proceeded one step in the simulation. ";
+                result += "You proceeded one step in the simulation.</br></br>";
                 /**    "Your selection let to the following temporary model:</br></br>";
                 result += "$$\\binom{x(t)}{z(t)}=\\binom{u_{0} * t}{w_{0} - \\frac{1}{2}gt^{2}}=\\binom{"+model_vx+" * t}{"+model_vy+" - \\frac{1}{2}gt^{2}}$$"; **/
 
