@@ -19,12 +19,19 @@
 <p></p>
 <div class="alert alert-success" role="alert">
     <h4 class="alert-heading">Exercise</h4>
+    <p class="font-italic"><i class="far fa-clock"></i> This exercise might take you ca. 20-30 min.</p>
     <hr>
     <p class="mb-0">
         The attached <a href="data/ClimateData_Process_Exercise.xls" target="_blank">Excel file</a>
         gives the raw digitized pressure and temperature values for the station of St. Gallen, Switzerland,
-        from 1813-1816, along with some auxiliary information. Convert the raw pressure readings to mean sea level (in hPa).
-        You find the solution <a href="data/ClimateData_Process_Solution.xls" target="_blank">here</a>.
+        from 1813-1816, along with some auxiliary information. The observer adjusted the pressure to a temperature of
+        10 °Réaumur (which was the standard at that time), but he did not do a gravity correction, and pressure is given in Paris inches.
+        Convert the pressure readings to gravity-corrected station pressure (in hPa), temperature-adjusted to 0 °C (the present-day standard).
+        If you want you can also reduce pressure to mean sea level (note that the World Meteorological
+        Organisation recommends this only for stations below 750 m asl - this station is at 776 m asl).
+        You can use Excel or R (here is the <a href="data/ClimateData_Process_Data.txt" target="_blank">txt file</a> with the data
+        and an <a href="data/ClimateData_Process_Exercise.R" target="_blank">R-script</a> to read in the data and including the auxiliary information).
+        Here is the solution for <a href="data/ClimateData_Process_Solution.xls" target="_blank">Excell</a> and for <a href="data/ClimateData_Process_Solution.R" target="_blank">R</a>.
     </p>
 </div>
 <div class="d-flex justify-content-between">
