@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Homogenize</h1>
+    <h1 class="h2">Homogenisation</h1>
 </div>
 <div class="card">
     <div class="card-body">
@@ -25,29 +25,35 @@
 </div>
 <p></p>
 <div class="alert alert-success" role="alert">
-    <h4 class="alert-heading">Exercise</h4>
+    <h4 class="alert-heading">Exercise I</h4>
+    <p class="font-italic"><i class="far fa-clock"></i> This exercise might take you ca. 10 min.</p>
     <hr>
     <p class="card-text">
         For the Craddock test the accumulated normalized differences \(s\) are calculated as follows:
 
-        $$s_{i} = s_{i-1} + a_{i} + (b_{m} - a_{m}) - b_{i}$$
+        $$s_{i} = s_{i-1} + a_{i} - b_{i} - (a_{m} - b_{m}) $$
         where \(a\) is the reference series, \(b\) is the candidate series, \(a_{m}\)
-        is the mean of the reference series over the whole period, \(a_{m}\) is
-        the mean of the candidate series over the whole period.Open the
-        <a href="data/ClimateData_Homogenize_BreakDetection_Exercise.xls" target="_blank">Excel-file</a>
-        and calculate \(s_{i}\). Afterwards, find the breakpoints in the figure on the
-        right in the Excel-sheet (check the <a href="data/ClimateData_Homogenize_BreakDetection_Solution.xls" target="_blank">solution</a>).
+        and \(b_{m}\) are their long-term means (\(s_{0} = 0\)).
+        Open the <a href="data/ClimateData_Homogenize_BreakDetection_Exercise.txt" target="_blank">Excel-file</a>
+        or the <a href="data/ClimateData_Homogenize_BreakDetection_Data.txt" target="_blank">R file</a>  and calculate \(s_{i}\).
+        Afterwards, find the breakpoints in the figure on the right in the Excel-sheet
+        (check the solution for <a href="data/ClimateData_Homogenize_BreakDetection_Solution.xls" target="_blank">Excel</a>
+        or <a href="data/ClimateData_Homogenize_BreakDetection_Solution.R" target="_blank">R</a>).
     </p>
+    <h4 class="alert-heading">Exercise II</h4>
+    <p class="font-italic"><i class="far fa-clock"></i> This exercise might take you ca. 15-20 min.</p>
+    <hr>
     <p class="card-text">
-        If possible, detected breaks are corrected. Thereby the most recent part of the
-        series is considered to be correct, and the earlier segements are corrected
-        towards the recent segments, working backwards. The correction amount is the
-        the difference between the mean value of the difference series before and after the
-        break, and this correction amount is subtracted form the segement before the break
-        (see <a href=http://campusvirtual.senamhi.gob.pe/climandes" target="_blank">Climandes</a> for further information).
+        If possible, detected breaks are corrected. Thereby the most recent part of the series is considered to be
+        correct, and the earlier segments are corrected towards the recent segments, working backwards.
+        The correction amount is the the difference between the mean value of the
+        difference series before and after the break, and this correction amount is
+        subtracted form the segment before the break (see
+        <a href="http://campusvirtual.senamhi.gob.pe/climandes" target="_blank">Climandes</a> for further information).
         Open the <a href="data/ClimateData_Homogenize_BreakCorrection_Exercise.xls" target="_blank">Excel-file</a>
         and try to correct the breaks you have found in the previous exercise
-        (here’s the <a href="data/ClimateData_Homogenize_BreakCorrection_Solution.xls" target="_blank">solution</a>).
+        (here’s the solution for <a href="data/ClimateData_Homogenize_BreakCorrection_Solution.xls" target="_blank">Excel</a> or
+        <a href="data/ClimateData_Homogenize_BreakCorrection_Solution.R" target="_blank">R</a>).
     </p>
 </div>
 <div class="d-flex justify-content-between">

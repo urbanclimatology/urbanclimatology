@@ -6,19 +6,17 @@
         <p class="card-text">
             Many errors may occur when doing measurements – or during the later processing.
             The instrument may not work well, the reading may be erroneous, there may by typos,
-            or errors may occur during processing. Quality Control (QC) procedures are designed
-            to find possible errors. A simple QC procedure is visual inspection. Plotting time series,
-            their statistics, or scatter plots of correlated variables helps finding suspect values.
-            Automatic tests start in a first step search for physically impossible values
-            (e.g., negative precipitation, humidity >100%, temperature < 0 K, pressure <0 hPa)
-            or physically unplausible values (e.g., temperatures outside -80 and +60 °C,
-            pressure outside 500 to 1100 hPa). A third set of tests often makes use of the
-            full length of a series. For instance, values that exceed ±4 standard deviations
-            are flagged for further inspection. Also the sequence is analysed: Often temperature
-            (pressure) observations on consecutive days that differ by more or 25 °C (40 hPa)
-            are flagged, as are four or more equal consecutive values in a row. Further tests
-            address the physical consistency between two variables and the spatial
-            consistency by comparing neighbouring stations.
+            or errors may occur during processing. Quality Control (QC) procedures are designed to find possible errors.
+            A simple QC procedure is visual inspection. Plotting time series, their statistics, or scatter plots of correlated
+            variables helps finding suspect values. In automatic tests, a first step often is to search for physically impossible values
+            (e.g., negative precipitation, humidity >100%, temperature <0 K, pressure <0 hPa), a second step is to search physically
+            unplausible values (e.g., temperatures outside -80 and +60 °C, pressure outside 500 to 1100 hPa).
+            The third step may then make use of the full length of a series. For instance,
+            values that exceed ±4 standard deviations are flagged for further inspection.
+            A fourth step may be to analyse the sequence: Often temperature (pressure) observations
+            on consecutive days that differ by more than 25 °C (40 hPa) are flagged, as are
+            four or more equal consecutive values in a row. Further tests address the physical
+            consistency between two variables and the spatial consistency by comparing neighbouring stations.
         </p>
 
     </div>
@@ -26,11 +24,13 @@
 <p></p>
 <div class="alert alert-success" role="alert">
     <h4 class="alert-heading">Exercise</h4>
+    <p class="font-italic"><i class="far fa-clock"></i> This exercise might take you ca. 15-20 min.</p>
     <hr>
     <p class="mb-0">
         Use your solution to the previous exercise and search for suspect temperature and
-        pressure values using the first three steps and by simple plotting.
-        Do you find unplausible values? Check a possible solution <a href="data/ClimateData_QC_Solution.xls" target="_blank">here</a>.
+        pressure values using the four tests described above and by simple plotting.
+        Do you find unplausible values? Here are possible solutions in
+        <a href="data/ClimateData_QC_Solution.xls" target="_blank">Excel</a> and <a href="data/ClimateData_QC_Solution.R" target="_blank">R</a>.
     </p>
 </div>
 <div class="d-flex justify-content-between">
