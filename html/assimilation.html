@@ -26,42 +26,55 @@
     <p class="font-italic"><i class="far fa-clock"></i>These two exercises will take you ca. 5-10 min.</p>
     <hr>
     <p class="card-text">
-        a) Score a goal (model: inclined throw) in the  <a onclick="contentManager.setContent('simulation');" href="#simulation">Simulation</a>,
-        learning outcome: Understand that the model provides physical consistency, but not reality.
+        a) Shoot at the castle in the  <a onclick="contentManager.setContent('simulation');" href="#simulation">Simulation</a>
+        (chose Simulation 1, enter initial horizontal and vertical speed into the two boxes).
+        Find at least three different combinations that hit the castle. Now you have a physically consistent model,
+        but it is not tied to real observations.
     </p>
     <p>
-        b) Now combine model and photos using the Particle Filter.
-        Perform a simulation with 10 members and 3 steps.
-        For each step, select the closest member to the photograph
-        (by clicking on it - either visually or by downloading the Excel file and calculating the Eucledian distance) and proceed.
-        How good is your average deviation? What happens if you increase the number of ensemble members to 25?
-        What happens if you increase the number of steps to 6?.
+        b) To combine model and observations, we now use a Particle Filter. <a onclick="contentManager.setContent('simulation');" href="#simulation">Simulation 2</a>
+        (chose Simulation 2) lets you chose the number of members and the number of steps.
+        Start with 10 members and 3 steps. For each step, select the closest member to the observation (marked in red).
+        You can select by clicking on it - either visually or by downloading the Excel file and calculating the Eucledian distance:
+        \(D = \sqrt{dx^{2}+dy^{2}}\). How good is your average deviation? How does the average deviation change
+        if you keep 3 steps but increase the number of ensemble members to 50 in steps of 10?
+        How does the average deviation change if you keep the number of members at 10 but increase the number of steps to 10?
     </p>
-    
+
     <h4 class="alert-heading">Exercise: Particle Filter</h4>
-    <p class="font-italic"><i class="far fa-clock"></i>These two exercises will take you ca. 5-10 min.</p>
+    <p class="font-italic"><i class="far fa-clock"></i>These two exercises will take you ca. 10-15 min.</p>
+    <p>
+        Kalman Filter: Two PDF Files provide an Introduction of the main concept
+        <a href="data/Reanalysis_DataAssimilation_Introduction.pdf" target="_blank">Reanalysis</a>
+        and of the <a href="data/Reanalysis_DataAssimilation_KalmanFilter.pdf" target="_blank">Kalman Filter</a>.
+    </p>
     <hr>
     <p>
-        c) Kalman Filter: Two PDF Files provide an Introduction of the main concept
-        <a href="data/Reanalysis_DataAssimilation_Introduction.pdf" target="_blank">Reanalysis Data Assimilation Introduction</a>
-        and of the Kalman Filter (<a href="data/Reanalysis_DataAssimilation_KalmanFilter.pdf" target="_blank">Reanalysis Data Assimilation Kalman Filter</a>).
-    </p>
-    <p>
-        Exercise 1: You have a substance that decays radioactively.
-        You can use the well known model:
+        c) Assume that you have a substance that decays radioactively and
+        you want to esimate the amount remaining (or radioactivity). For the decay you can use the well known model:
         $$N_{t+1} = N_{t} e^{ -\lambda \Delta t}$$
         with \(\lambda = 0.5 s^{-1}\). In addition, you have observations of a Geiger counter (in counts/s).
-        The error of the observation is 2 counts/s, the error of the model is a bit more
-        complex as it is given in an error of the decay constant of \(0.025 s^{-1}\) (the values per time step are already calculated for you).
-        Open the <a href="data/Reanalysis_DataAssimilation_Exercise1.xls" target="_blank">Excel Sheet Kalman Filter</a>,
-        do the assimilation over the first 20 s and compare with the <a href="data/Reanalysis_DataAssimilation_Solution1.xls" target="_blank">solution</a>.
+        The error of the observation is 2 counts/s, the error of the model is not constant but depends on value;
+        the numbers are are already calculated for you. Open the <a href="data/Reanalysis_DataAssimilation_Exercise1.xls" target="_blank">Excel Sheet</a>,
+        or the <a href="data/Reanalysis_DataAssimilation_Exercise1_Data.txt" target="_blank">txt File</a> using the
+        <a href="data/Reanalysis_DataAssimilation_Exercise1.R" target="_blank">R-script </a>.
+        Now do the assimilation over the first 20 s If you need additional help, here is a schematic of
+        how the the exercise can be solved in Excel <a href="data/Reanalysis_DataAssimilation_Solution1.pdf" target="_blank">Excel</a>.
+        Then compare your results with the solution in <a href="data/Reanalysis_DataAssimilation_Solution1.xls" target="_blank">Excel</a>
+        or <a href="data/Reanalysis_DataAssimilation_Solution1.R" target="_blank">R</a>.
     </p>
     <p>
-        Exercise 2: Let’s return to the football example. The model is that of the inclined
-        throw used above, with a simple friction term. Have a look at the <a href="data/Reanalysis_DataAssimilation_Exercise.pdf" target="_blank">PDF</a>
-        and download the <a href="data/Reanalysis_DataAssimilation_Exercise2.xls" target="_blank">Excel-sheet</a>.
-        The first part of the solution is the <a href="data/Reanalysis_DataAssimilation_SolutionAlgebra.pdf" target="_blank">algebraic formulation</a>;
-        the numeric solution is given in the <a href="data/Reanalysis_DataAssimilation_Solution2.xls" target="_blank">this Excel sheet</a>.
+        d) Let’s return to the football example. The model is that of the inclined
+        throw used above. Have a look at the <a href="data/Reanalysis_DataAssimilation_Exercise.pdf" target="_blank">PDF</a>
+        and download the <a href="data/Reanalysis_DataAssimilation_Exercise2.xls" target="_blank">Excel-sheet </a>  or use an
+        <a href="data/Reanalysis_DataAssimilation_Exercise2.R" target="_blank">R-script</a> to open the data in
+        <a href="data/Reanalysis_DataAssimilation_Exercise2_Data.txt" target="_blank">txt-format</a>. But before starting, try to come
+        up with an algebraic formulation. The solution is given in a
+        <a href="data/Reanalysis_DataAssimilation_SolutionAlgebra.pdf" target="_blank">PDF file</a>. This solution can
+        then be implemented numerically using either Excel or R. For Excel, here is a
+        schematic showing how to solve the exercise <a href="data/Kalman_Filter_Solution2.pdf" target="_blank">exercise</a>.
+        This is the numerical solution in <a href="data/Reanalysis_DataAssimilation_Solution2.xls" target="_blank">Excel</a>
+        and here is the <a href="data/Reanalysis_DataAssimilation_Solution2.R" target="_blank">R solution</a>.
     </p>
 </div>
 <div class="d-flex justify-content-between">

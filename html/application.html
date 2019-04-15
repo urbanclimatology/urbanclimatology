@@ -30,11 +30,13 @@
     <hr>
     <p class="card-text">
         In the catchment for which you have reconstructed precipitation, there is a lake.
-        A company operates ferries and cruise ships on this lake. Navigation cannot take
-        place if the lake level is below 5 m, and also not if it is above 8 m.
+        A company operates ferries and cruise ships on this lake.
+        Navigation cannot take place if the lake level is below 5 m, and also not if it is above 8 m.
         The company would like to know on how many days per year the lake is not navigable.
         In the <a href="data/Applications_LakeModel_Exercise.xls" target="_blank">Excel sheet</a>
-        you have precipitation data (downscaled or observed) since 1950, plus a starting value.
+        (or as <a href="data/Applications_LakeModel_Data.txt" target="_blank">txt-file</a>
+        and <a href="data/Applications_LakeModel_Exercise.R" target="_blank">R-script</a>)
+        you have precipitation data since 1950, plus a starting value.
         Use a simple mass balance model to simulate the lake level day by day.
 
         $$L_{t} = L_{t-1} e^{ -\lambda \Delta t} + f R_{t}$$
@@ -42,9 +44,8 @@
         where \(L\) is the lake level (in mm), \(R\) is daily rain fall (in mm), \(f\) (= 10)
         is the concentration factor (ratio between the catchment area and the lake surface area),
         \(\lambda\) (= 0.004 per day) describes the outflow of the lake, \(\Delta t\) (= 1 day) is the time increment.
-        Note that this is an oversimplified model that neglects evaporation,
-        storage in the form of snow or any other hydrological processes (see <a href="data/Applications_LakeModel_Solution.xls" target="_blank">solution</a>).
-
+        Note that this is an oversimplified model that neglects evaporation, storage in the form of snow or any other hydrological processes.
+        Here you find the <a href="data/Applications_LakeModel_Solution.xls" target="_blank">solution in Excel</a> and in <a href="data/Applications_LakeModel_Solution.R" target="_blank">R</a>.
     </p>
 </div>
 <div class="d-flex justify-content-between">
