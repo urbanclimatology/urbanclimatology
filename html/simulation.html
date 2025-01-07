@@ -1,80 +1,52 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Simulation</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <form class="form-inline mb-md-0">
-            <label class="sr-only" for="horizontalSpeed">Name</label>
-            <input type="number" class="form-control mr-sm-2 mb-1" id="horizontalSpeed" value="25" min="1" max="50" data-toggle="tooltip" data-placement="bottom" title="Horizontal speed of the shot in simulation 1" placeholder="Horizontal Speed">
-
-            <label class="sr-only" for="verticalSpeed">Name</label>
-            <input type="number" class="form-control mr-sm-2 mb-1" id="verticalSpeed" value="25" min="1" max="50" data-toggle="tooltip" data-placement="bottom" title="Vertical speed of the shot in simulation 1" placeholder="Vertical Speed">
-            <button class="btn btn-outline-secondary mr-4  mb-1" data-toggle="tooltip" data-placement="top" title="Tooltip on top"
-                    onclick="simulation1.init();
-                    simulation1.start($('#horizontalSpeed').val(),$('#verticalSpeed').val())">
-                Start Simulation 1</button>
-
-            <label class="sr-only" for="nrSteps">Steps</label>
-            <input type="number" class="form-control mr-sm-2 mb-1" id="nrSteps" value="3" min="1" max="10" data-toggle="tooltip" data-placement="bottom" title="Number of steps in simulation 2" placeholder="Steps">
-
-            <label class="sr-only" for="nrBalls">Name</label>
-            <input type="number" class="form-control mr-sm-2 mb-1" id="nrBalls" value="10" min="1" max="50" data-toggle="tooltip" data-placement="bottom" title="Number of balls in simulation 2"  placeholder="Balls">
-            <button class="btn btn-outline-secondary" onclick="simulation2.init();
-                                simulation2.start($('#nrSteps').val(),$('#nrBalls').val())">Start Simulation 2</button>
-        </form>
-        </div>
-    </div>
+    <h1 class="h2">Extreme Gradient Boost</h1>
 </div>
-<div class="simulation-space">
-</div>
-<!-- Modal -->
-<div class="modal fade" id="ResultsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary modal-action">Excel Export</button>
-                <button type="button" class="btn btn-primary show-solution" style="display:none">Excel Export Solution</button>
-            </div>
-        </div>
+<div class="card">
+    <div class="card-body">
+        <p class="card-text">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam lobortis facilisis sem.
+            Nullam nec mi et neque pharetra sollicitudin. Praesent imperdiet mi nec ante. Donec
+            ullamcorper, felis non sodales commodo, lectus velit ultrices augue, a dignissim nibh
+            lectus placerat pede. Vivamus nunc nunc, molestie ut, ultricies vel, semper in, velit. Ut
+            porttitor. Praesent in sapien. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+            Duis fringilla tristique neque. Sed interdum libero ut metus. Pellentesque placerat. Nam
+            rutrum augue a leo. Morbi sed elit sit amet ante lobortis sollicitudin. Praesent blandit
+            blandit mauris. Praesent lectus tellus, aliquet aliquam, luctus a, egestas a, turpis. Mauris
+            lacinia lorem sit amet ipsum. Nunc quis urna dictum turpis accumsan semper.
+        </p>
+        <p class="card-text">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam lobortis facilisis sem.
+            Nullam nec mi et neque pharetra sollicitudin. Praesent imperdiet mi nec ante. Donec
+            ullamcorper, felis non sodales commodo, lectus velit ultrices augue, a dignissim nibh
+            lectus placerat pede. Vivamus nunc nunc, molestie ut, ultricies vel, semper in, velit. Ut
+            porttitor. Praesent in sapien. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+            Duis fringilla tristique neque. Sed interdum libero ut metus. Pellentesque placerat. Nam
+            rutrum augue a leo. Morbi sed elit sit amet ante lobortis sollicitudin. Praesent blandit
+            blandit mauris. Praesent lectus tellus, aliquet aliquam, luctus a, egestas a, turpis. Mauris
+            lacinia lorem sit amet ipsum. Nunc quis urna dictum turpis accumsan semper.
+        </p>
     </div>
 </div>
 <p></p>
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Theoretical Background</h4>
+    <p class="font-italic"><i class="far fa-clock"></i>Hyperparameter tuning</p>
+    <hr>
+    <p class="card-text">
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam lobortis facilisis sem.
+        Nullam nec mi et neque pharetra sollicitudin. Praesent imperdiet mi nec ante. Donec
+        ullamcorper, felis non sodales commodo, lectus velit ultrices augue, a dignissim nibh
+        lectus placerat pede. Vivamus nunc nunc, molestie ut, ultricies vel, semper in, velit. Ut
+        porttitor. Praesent in sapien. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+        Duis fringilla tristique neque. Sed interdum libero ut metus. Pellentesque placerat. Nam
+        rutrum augue a leo. Morbi sed elit sit amet ante lobortis sollicitudin. Praesent blandit
+        blandit mauris. Praesent lectus tellus, aliquet aliquam, luctus a, egestas a, turpis. Mauris
+        lacinia lorem sit amet ipsum. Nunc quis urna dictum turpis accumsan semper
+    </p>
+    <hr>
+</div>
 <div class="d-flex justify-content-between">
-    <button type="button" class="btn btn-outline-secondary btn-lg" onclick="contentManager.setContent('assimilation');" ><- Previous</button>
-    <button type="button" class="btn btn-outline-secondary btn-lg" onclick="contentManager.setContent('reanalysis');" >Next -></button>
+    <button type="button" class="btn btn-outline-secondary btn-lg" onclick="contentManager.setContent('reanalyses-entry');" ><- Previous</button>
+    <button type="button" class="btn btn-outline-secondary btn-lg" onclick="contentManager.setContent('simulation');" >Next -></button>
 </div>
-<p></p>
-<!--
-<h2 class="h3 results">Ergebnisse</h2>
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Result</th>
-        <th scope="col">Export</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td><span class="badge badge-success">Hit</span></td>
-        <td><button type="button" class="btn btn-primary">Export</button></td>
-    </tr>
-    <tr>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td><span class="badge badge-danger">Miss</span></td>
-        <td><button type="button" class="btn btn-primary">Export</button></td>
-    </tr>
-    </tbody>
-</table>
--->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML'></script>
