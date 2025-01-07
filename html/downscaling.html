@@ -1,61 +1,40 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Downscaling </h1>
+    <h1 class="h2">Method 2</h1>
 </div>
 <div class="card">
     <div class="card-body">
         <p class="card-text">
-            Reanalyses capture only the large-scale, but some variables vary strongly on much smaller scales.
-            This small-scale variation depends on topography or land cover (e.g., near coast lines), for instance.
-            Reanalysis data therefore often require spatial refinement. The same is true for weather forecasts,
-            or for climate scenarios. The corresponding approaches are called “downscaling”.
-        </p>
-        <p class="card-text">
-            Two classes of approaches are distinguished: numerical and statistical downscaling.
-            The former requires a global model or reanalysis, into which a regional numerical weather prediction model
-            is embedded. This nesting can be repeated to obtain local information. The regional model adds
-            information on topography and land cover, while meteorological information is passed on from large to
-            small scales. Weather forecasts are done in that way. Statistical downscaling uses statistical
-            relations between the large-scale predictors (e.g., from a reanalysis) and local weather variables from observations.
-        </p>
-        <p class="card-text">
-            An intuitive statistical method is analog downscaling, which assumes that similar
-            large-scale conditions lead to similar local weather. If a sufficiently large set of
-            conditions is available for both, large-scale variables and local weather, then local weather can be estimated
-            for a given large-scale situation by choosing the most similar case. You can train this approach in the exercise bellow.
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam lobortis facilisis sem.
+            Nullam nec mi et neque pharetra sollicitudin. Praesent imperdiet mi nec ante. Donec
+            ullamcorper, felis non sodales commodo, lectus velit ultrices augue, a dignissim nibh
+            lectus placerat pede. Vivamus nunc nunc, molestie ut, ultricies vel, semper in, velit. Ut
+            porttitor. Praesent in sapien. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+            Duis fringilla tristique neque. Sed interdum libero ut metus. Pellentesque placerat. Nam
+            rutrum augue a leo. Morbi sed elit sit amet ante lobortis sollicitudin. Praesent blandit
+            blandit mauris. Praesent lectus tellus, aliquet aliquam, luctus a, egestas a, turpis. Mauris
+            lacinia lorem sit amet ipsum. Nunc quis urna dictum turpis accumsan semper.
         </p>
     </div>
 </div>
 
 <p></p>
-<div class="alert alert-success" role="alert">
-    <h4 class="alert-heading">Exercise</h4>
-    <p class="font-italic"><i class="far fa-clock"></i>These two exercises will take you ca. 20 min.</p>
+<div class="alert alert-primary" role="alert">
+    <h4 class="alert-heading">Theoretical Background</h4>
     <hr>
-    <p class="card-text">
-        Assume we have unbiased climate model simulations of the future.
-        They are good at projecting the large-scale circulation, such as depicted by the 500 hPa geopotential height fields,
-        but not local precipitation, which strongly depends on the topography.
-        Assuming that local precipitation will be similar for similar large-scale circulaiton
-        and given a sufficiently large pool of potential analog days (with data for local precipitation as well as for large-scale predictions),
-        we can determine the closest analog in the pool according to the similarity of the large-scale variables.
-        A distance measure is needed for that (sound familiar? we already determined distances in the Particle Filter exercise).
-        Here is a more detailed description of the <a href="data/Downscaling_Exercise.pdf" target="_blank">exercise</a>.
-    </p>
-    <p class="card-text">
-        In the attached sheet you get one year worth of data of local precipitation and three
-        large-scale predictors; here's the <a href="data/Applications_Analog_Exercise.xls" target="_blank">Excel version</a>.
-        For R, please find two txt files (one with the <a href="data/Applications_Analog_Data_Pool.txt" target="_blank">pool of analogs</a>
-        and one with the with the large-scale variables to be <a href="data/Applications_Analog_Data_Candidates.txt" target="_blank">downscaled</a>)
-        an <a href="data/Analog_Exercise.R" target="_blank">R-script</a> to read it in.
-        Now use the “Best Analog” approach based on the Eucledian distance (the variables are standardized).
-        Note that this tasks requires you to calculate a distance matrix, which is a bit tricky in Excel.
-        Here is a step-by-step <a href="data/Analog_Solution_StepByStep.pdf" target="_blank">solution</a>.
-        Check your result against the solution in <a href="data/Applications_Analog_Solution.xls" target="_blank">Excel</a> or <a href="data/Analog_Solution.R" target="_blank">R</a>. The Excel solution also has the actual measurements.
-        How good would you rate your reconstruction?
+    <p class="mb-0">
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam lobortis facilisis sem.
+        Nullam nec mi et neque pharetra sollicitudin. Praesent imperdiet mi nec ante. Donec
+        ullamcorper, felis non sodales commodo, lectus velit ultrices augue, a dignissim nibh
+        lectus placerat pede. Vivamus nunc nunc, molestie ut, ultricies vel, semper in, velit. Ut
+        porttitor. Praesent in sapien. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+        Duis fringilla tristique neque. Sed interdum libero ut metus. Pellentesque placerat. Nam
+        rutrum augue a leo. Morbi sed elit sit amet ante lobortis sollicitudin. Praesent blandit
+        blandit mauris. Praesent lectus tellus, aliquet aliquam, luctus a, egestas a, turpis. Mauris
+        lacinia lorem sit amet ipsum. Nunc quis urna dictum turpis accumsan semper.
     </p>
 </div>
 
 <div class="d-flex justify-content-between">
-    <button type="button" class="btn btn-outline-secondary btn-lg" onclick="contentManager.setContent('downscaling-entry');" ><- Previous</button>
-    <button type="button" class="btn btn-outline-secondary btn-lg" onclick="contentManager.setContent('application');" >Next -></button>
+    <button type="button" class="btn btn-outline-secondary btn-lg" onclick="contentManager.setContent('reanalysis');" ><- Previous</button>
+    <button type="button" class="btn btn-outline-secondary btn-lg" onclick="contentManager.setContent('downscaling');" >Next -></button>
 </div>
